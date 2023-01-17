@@ -9,12 +9,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
     }
 
-    fun summarizeString(text: String) : String {
-        var summarizeString: String = "Not text"
 
-
-        return summarizeString
-    }
 
 
 }
