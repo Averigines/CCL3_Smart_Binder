@@ -4,19 +4,22 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentStatePagerAdapter
+import androidx.lifecycle.Lifecycle
 import androidx.room.Room
-import androidx.viewpager.widget.ViewPager
+import androidx.viewpager2.adapter.FragmentStateAdapter
+import androidx.viewpager2.widget.ViewPager2
 
-class TopicPagerAdapter(fragmentManager: FragmentManager, private val topics: List<Topic>) :
-    FragmentStatePagerAdapter(fragmentManager) {
+class TopicPagerAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle, private val topics: List<Topic>, private val activeTopic: Topic) :
+    FragmentStateAdapter(fragmentManager, lifecycle) {
 
-    override fun getItem(position: Int): Fragment {
+    override fun getItemCount(): Int {
+        return topics.size
+    }
+
+    override fun createFragment(position: Int): Fragment {
         val topic = topics[position]
         return TopicFragment.newInstance(topic)
     }
-
-    override fun getCount() = topics.size
 }
 
 class ActivityCategory : AppCompatActivity() {
@@ -24,16 +27,18 @@ class ActivityCategory : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_category)
 
-        val topic = intent.getSerializableExtra("topic") as Topic
+        val activeTopic = intent.getSerializableExtra("topic") as Topic
 
         val db = Room.databaseBuilder(
             this,
             AppDatabase::class.java, "smartBinderDB"
         ).allowMainThreadQueries().build()
 
-        val topics = db.topicDao().getTopicsOfCategory(topic.categoryId)
+        val topics = db.topicDao().getTopicsOfCategory(activeTopic.categoryId)
+        val activeTopicId = topics.indexOf(activeTopic)
 
-        val viewPager = findViewById<ViewPager>(R.id.viewPager)
-        viewPager.adapter = TopicPagerAdapter(supportFragmentManager, topics)
+        val viewPager = findViewById<ViewPager2>(R.id.viewPager)
+        viewPager.adapter = TopicPagerAdapter(supportFragmentManager, lifecycle, topics, activeTopic)
+        viewPager.currentItem = activeTopicId
     }
 }
