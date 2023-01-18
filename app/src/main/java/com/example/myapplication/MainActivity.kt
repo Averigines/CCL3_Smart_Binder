@@ -46,7 +46,7 @@ class MainActivity : AppCompatActivity(), OnCategoryClickListener {
     }
     override fun onCategoryClick(category: Category) {
         val intent = Intent(this, ActivityCategory::class.java)
-        intent.putExtra("category", category.id)
+        intent.putExtra("categoryID", category.id)
         startActivity(intent)
     }
 }
