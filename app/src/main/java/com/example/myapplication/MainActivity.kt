@@ -8,7 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import androidx.room.Room
 
-class MainActivity : AppCompatActivity(), OnCategoryClickListener {
+class MainActivity : AppCompatActivity(), OnTopicClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -18,6 +18,26 @@ class MainActivity : AppCompatActivity(), OnCategoryClickListener {
             AppDatabase::class.java, "smartBinderDB"
         ).allowMainThreadQueries().build()
 
+        addData(db)
+
+        val allTopics = db.topicDao().getAll()
+        val categoriesWithTopics = db.categoryDao().getCategoriesWithTopics()
+
+        val recyclerView = findViewById<RecyclerView>(R.id.rv)
+        recyclerView.adapter = CategoryAdapter(categoriesWithTopics, this)
+
+        findViewById<Button>(R.id.btnAddCard).setOnClickListener {
+            startActivity(Intent(this, ActivityAddCard::class.java))
+        }
+    }
+    override fun onTopicClick(topic: Topic) {
+
+        val intent = Intent(this, ActivityCategory::class.java)
+        intent.putExtra("topic", topic)
+        startActivity(intent)
+    }
+
+    private fun addData(db:AppDatabase) {
         db.categoryDao().deleteAll()
         db.topicDao().deleteAll()
         db.cardDao().deleteAll()
@@ -33,20 +53,5 @@ class MainActivity : AppCompatActivity(), OnCategoryClickListener {
         db.topicDao().insert(Topic(0, "Putter", allCategories[3].id))
         db.topicDao().insert(Topic(0, "Mammals", allCategories[0].id))
         db.topicDao().insert(Topic(0, "Forest", allCategories[0].id))
-
-        val allTopics = db.topicDao().getAll()
-        val categoriesWithTopics = db.categoryDao().getCategoriesWithTopics()
-
-        val recyclerView = findViewById<RecyclerView>(R.id.rv)
-        recyclerView.adapter = CategoryAdapter(categoriesWithTopics, this)
-
-        findViewById<Button>(R.id.btnAddCard).setOnClickListener {
-            startActivity(Intent(this, ActivityAddCard::class.java))
-        }
-    }
-    override fun onCategoryClick(category: Category) {
-        val intent = Intent(this, ActivityCategory::class.java)
-        intent.putExtra("categoryID", category.id)
-        startActivity(intent)
     }
 }

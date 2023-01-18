@@ -3,6 +3,7 @@ package com.example.myapplication
 import androidx.room.*
 import androidx.room.ForeignKey.Companion.CASCADE
 import androidx.room.migration.AutoMigrationSpec
+import java.io.Serializable
 
 @Entity
 data class Category(
@@ -20,7 +21,7 @@ data class Topic(
     @PrimaryKey(autoGenerate = true) val id: Int,
     val name: String,
     val categoryId: Int
-)
+) : Serializable
 
 @Entity(foreignKeys = [ForeignKey(entity = Topic::class,
     parentColumns = arrayOf("id"),

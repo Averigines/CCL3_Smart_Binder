@@ -9,11 +9,11 @@ import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
-interface OnCategoryClickListener {
-    fun onCategoryClick(category: Category)
+interface OnTopicClickListener {
+    fun onTopicClick(topic: Topic)
 }
 
-class CategoryAdapter(private val categories: List<CategoryWithTopics>, private val listener: OnCategoryClickListener) :
+class CategoryAdapter(private val categories: List<CategoryWithTopics>, private val listener: OnTopicClickListener) :
     RecyclerView.Adapter<CategoryAdapter.ViewHolder>() {
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -30,19 +30,29 @@ class CategoryAdapter(private val categories: List<CategoryWithTopics>, private 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val category = categories[position]
         holder.categoryName.text = category.category.name
-        holder.topicList.apply {
-            layoutManager = LinearLayoutManager(holder.topicList.context)
-            adapter = TopicAdapter(category.topics)
-        }
+        holder.topicList.visibility = View.GONE
         holder.itemView.setOnClickListener {
-            listener.onCategoryClick(category.category)
+            if(holder.topicList.visibility == View.GONE) {
+                setUpTopicList(holder, category.topics)
+                holder.topicList.visibility = View.VISIBLE
+            }
+            else {
+                holder.topicList.visibility = View.GONE
+            }
         }
     }
 
     override fun getItemCount() = categories.size
+
+    private fun setUpTopicList(holder: ViewHolder, topics: List<Topic>) {
+        holder.topicList.apply {
+            layoutManager = LinearLayoutManager(holder.topicList.context)
+            adapter = TopicAdapter(topics, listener)
+        }
+    }
 }
 
-class TopicAdapter(private val topics: List<Topic>) :
+class TopicAdapter(private val topics: List<Topic>, private val listener: OnTopicClickListener) :
     RecyclerView.Adapter<TopicAdapter.ViewHolder>() {
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -58,6 +68,9 @@ class TopicAdapter(private val topics: List<Topic>) :
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val topic = topics[position]
         holder.topicName.text = topic.name
+        holder.itemView.setOnClickListener {
+            listener.onTopicClick(topic)
+        }
     }
 
     override fun getItemCount() = topics.size

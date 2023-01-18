@@ -24,16 +24,14 @@ class ActivityCategory : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_category)
 
-        val bundle = intent.extras
-        val categoryID = bundle?.getInt("categoryID")
+        val topic = intent.getSerializableExtra("topic") as Topic
 
         val db = Room.databaseBuilder(
             this,
             AppDatabase::class.java, "smartBinderDB"
         ).allowMainThreadQueries().build()
 
-        val topics = db.topicDao().getTopicsOfCategory(categoryID!!)
-
+        val topics = db.topicDao().getTopicsOfCategory(topic.categoryId)
 
         val viewPager = findViewById<ViewPager>(R.id.viewPager)
         viewPager.adapter = TopicPagerAdapter(supportFragmentManager, topics)
