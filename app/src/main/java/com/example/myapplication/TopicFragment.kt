@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 
 class TopicFragment : Fragment() {
     private lateinit var topic: Topic
+    private lateinit var cards: List<Card>
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -20,16 +21,17 @@ class TopicFragment : Fragment() {
         val header = view.findViewById<TextView>(R.id.tvTopic)
         header.text = topic.name
 
-        /*val recyclerView = view.findViewById<RecyclerView>(R.id.flashcard_list)
+        val recyclerView = view.findViewById<RecyclerView>(R.id.rvCards)
         recyclerView.layoutManager = LinearLayoutManager(context)
-        recyclerView.adapter = FlashcardAdapter(topic.flashcards)*/
+        recyclerView.adapter = CardAdapter(cards)
 
         return view
     }
 
     companion object {
-        fun newInstance(topic: Topic) = TopicFragment().apply {
+        fun newInstance(topic: Topic, cards: List<Card>) = TopicFragment().apply {
             this.topic = topic
+            this.cards = cards
         }
     }
 }

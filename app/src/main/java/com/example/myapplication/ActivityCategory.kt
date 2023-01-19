@@ -10,16 +10,17 @@ import androidx.room.Room
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 
-class TopicPagerAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle, private val topics: List<Topic>, private val activeTopic: Topic) :
+class TopicPagerAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle, private val topicsWithCards: List<TopicsWithCards>) :
     FragmentStateAdapter(fragmentManager, lifecycle) {
 
     override fun getItemCount(): Int {
-        return topics.size
+        return topicsWithCards.size
     }
 
     override fun createFragment(position: Int): Fragment {
-        val topic = topics[position]
-        return TopicFragment.newInstance(topic)
+        val topic = topicsWithCards[position].topics
+        val cards = topicsWithCards[position].cards
+        return TopicFragment.newInstance(topic, cards)
     }
 }
 
@@ -52,13 +53,15 @@ class ActivityCategory : AppCompatActivity() {
         val topics = db.topicDao().getTopicsOfCategory(activeTopic.categoryId)
         val activeTopicId = topics.indexOf(activeTopic)
         val cards = db.cardDao().getCardsofTopic(activeTopic.id)
+        val topicsWithCards = db.topicDao().getTopicsWithCards()
 
         val viewPager = findViewById<ViewPager2>(R.id.viewPager)
-        viewPager.adapter = TopicPagerAdapter(supportFragmentManager, lifecycle, topics, activeTopic)
+        //viewPager.adapter = TopicPagerAdapter(supportFragmentManager, lifecycle, topics, cards)
+        viewPager.adapter = TopicPagerAdapter(supportFragmentManager, lifecycle, topicsWithCards)
         viewPager.currentItem = activeTopicId
-        val rvCards = findViewById<RecyclerView>(R.id.rvCards)
-        rvCards.adapter = CardAdapter(cards)
-        viewPager.registerOnPageChangeCallback(ViewPagerCallback(rvCards, topics, db))
+        //val rvCards = findViewById<RecyclerView>(R.id.rvCards)
+        //rvCards.adapter = CardAdapter(cards)
+        //viewPager.registerOnPageChangeCallback(ViewPagerCallback(rvCards, topics, db))
 
     }
 

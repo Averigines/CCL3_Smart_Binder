@@ -44,6 +44,15 @@ data class CategoryWithTopics(
     val topics: List<Topic>
 )
 
+data class TopicsWithCards(
+    @Embedded val topics: Topic,
+    @Relation(
+        parentColumn = "id",
+        entityColumn = "topicId"
+    )
+    val cards: List<Card>
+)
+
 @Dao
 interface CategoryDao {
 
@@ -74,6 +83,10 @@ interface CategoryDao {
 interface TopicDao {
     @Query("SELECT * FROM topic")
     fun getAll(): List<Topic>
+
+    @Transaction
+    @Query("SELECT * FROM topic")
+    fun getTopicsWithCards(): List<TopicsWithCards>
 
     @Query("SELECT * FROM topic WHERE id = :id")
     fun getById(id: Int): Topic
