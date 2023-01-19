@@ -7,13 +7,12 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
 import androidx.cardview.widget.CardView
-import org.w3c.dom.Text
 
-class flipCard : AppCompatActivity() {
+class FlipCard : AppCompatActivity() {
 
-    lateinit var front_anim:AnimatorSet
-    lateinit var back_anim:AnimatorSet
-    var isFront: Boolean = true
+    private lateinit var frontAnim:AnimatorSet
+    private lateinit var backAnim:AnimatorSet
+    private var isFront: Boolean = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,21 +26,21 @@ class flipCard : AppCompatActivity() {
         cardFront.cameraDistance = 8000 * scale
         cardBack.cameraDistance = 8000 * scale
 
-        front_anim = AnimatorInflater.loadAnimator(applicationContext, R.animator.front_animator) as AnimatorSet
-        back_anim = AnimatorInflater.loadAnimator(applicationContext, R.animator.back_animator) as AnimatorSet
+        frontAnim = AnimatorInflater.loadAnimator(applicationContext, R.animator.front_animator) as AnimatorSet
+        backAnim = AnimatorInflater.loadAnimator(applicationContext, R.animator.back_animator) as AnimatorSet
 
         btnFlip.setOnClickListener {
             if(isFront) {
-                front_anim.setTarget(cardFront)
-                back_anim.setTarget(cardBack)
-                front_anim.start()
-                back_anim.start()
+                frontAnim.setTarget(cardFront)
+                backAnim.setTarget(cardBack)
+                frontAnim.start()
+                backAnim.start()
                 isFront = false
             } else {
-                front_anim.setTarget(cardBack)
-                back_anim.setTarget(cardFront)
-                back_anim.start()
-                front_anim.start()
+                frontAnim.setTarget(cardBack)
+                backAnim.setTarget(cardFront)
+                backAnim.start()
+                frontAnim.start()
                 isFront = true
             }
         }
