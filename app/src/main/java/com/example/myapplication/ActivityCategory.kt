@@ -53,7 +53,7 @@ class ActivityCategory : AppCompatActivity() {
         val topics = db.topicDao().getTopicsOfCategory(activeTopic.categoryId)
         val activeTopicId = topics.indexOf(activeTopic)
         val cards = db.cardDao().getCardsofTopic(activeTopic.id)
-        val topicsWithCards = db.topicDao().getTopicsWithCards()
+        val topicsWithCards = db.topicDao().getTopicWithCards(activeTopic.categoryId)
 
         val viewPager = findViewById<ViewPager2>(R.id.viewPager)
         //viewPager.adapter = TopicPagerAdapter(supportFragmentManager, lifecycle, topics, cards)

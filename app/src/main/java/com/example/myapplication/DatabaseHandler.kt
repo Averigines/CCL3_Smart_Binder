@@ -85,8 +85,8 @@ interface TopicDao {
     fun getAll(): List<Topic>
 
     @Transaction
-    @Query("SELECT * FROM topic")
-    fun getTopicsWithCards(): List<TopicsWithCards>
+    @Query("SELECT * FROM topic WHERE categoryId = :id")
+    fun getTopicWithCards(id: Int): List<TopicsWithCards>
 
     @Query("SELECT * FROM topic WHERE id = :id")
     fun getById(id: Int): Topic
