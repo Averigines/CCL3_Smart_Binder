@@ -20,7 +20,7 @@ class MainActivity : AppCompatActivity(), OnTopicClickListener {
             AppDatabase::class.java, "smartBinderDB"
         ).allowMainThreadQueries().build()
 
-        addData(db)
+        //addData(db)
 
         val cl = findViewById<ConstraintLayout>(R.id.clMain)
         val allTopics = db.topicDao().getAll()
