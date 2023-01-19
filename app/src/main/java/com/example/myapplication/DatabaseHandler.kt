@@ -107,6 +107,12 @@ interface CardDao {
 
     @Query("DELETE FROM card")
     fun deleteAll()
+
+    @Query("SELECT * FROM card")
+    fun getAll(): List<Card>
+
+    @Query("SELECT * FROM card WHERE topicId = :id")
+    fun getCardsofTopic(id: Int): List<Card>
 }
 
 @Database(entities = [Category::class, Topic::class, Card::class], version = 5, autoMigrations = [

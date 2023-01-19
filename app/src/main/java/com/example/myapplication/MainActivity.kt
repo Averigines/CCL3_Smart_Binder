@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.children
 import androidx.recyclerview.widget.RecyclerView
 import androidx.room.Room
 
@@ -20,8 +22,10 @@ class MainActivity : AppCompatActivity(), OnTopicClickListener {
 
         addData(db)
 
+        val cl = findViewById<ConstraintLayout>(R.id.clMain)
         val allTopics = db.topicDao().getAll()
         val categoriesWithTopics = db.categoryDao().getCategoriesWithTopics()
+        val allCards = db.cardDao().getAll()
 
         val recyclerView = findViewById<RecyclerView>(R.id.rv)
         recyclerView.adapter = CategoryAdapter(categoriesWithTopics, this)
@@ -53,5 +57,10 @@ class MainActivity : AppCompatActivity(), OnTopicClickListener {
         db.topicDao().insert(Topic(0, "Putter", allCategories[3].id))
         db.topicDao().insert(Topic(0, "Mammals", allCategories[0].id))
         db.topicDao().insert(Topic(0, "Forest", allCategories[0].id))
+        val allTopics = db.topicDao().getAll()
+        db.cardDao().insert(Card(0, "Players", "There are 10 players in total.", allTopics[1].id))
+        db.cardDao().insert(Card(0, "AK47", "The AK costs 2700.", allTopics[1].id))
+        db.cardDao().insert(Card(0, "Money", "You earn more money if you lose.", allTopics[1].id))
+
     }
 }
