@@ -22,6 +22,8 @@ class ActivityAddCard : AppCompatActivity() {
             AppDatabase::class.java, "smartBinderDB"
         ).allowMainThreadQueries().build()
 
+
+
         val allCategories = db.categoryDao().getAll()
         val categoryNames = ArrayList<String>()
         //categoryNames.add("")
