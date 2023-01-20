@@ -1,6 +1,8 @@
 import android.content.Context
 import android.os.Parcelable
+import androidx.cardview.widget.CardView
 import kotlinx.android.parcel.Parcelize
+import kotlinx.android.parcel.RawValue
 
 @Parcelize
 data class Cards(
@@ -11,6 +13,7 @@ data class Cards(
     ): Parcelable {
 
     companion object {
+
         fun cardsList(context: Context) : List<Cards> {
             return listOf(
                 Cards("Food", "Italian", "Pizza", "Delicious Italian dish made with tomato sauce, cheese and various toppings."),

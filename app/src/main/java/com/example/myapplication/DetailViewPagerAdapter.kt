@@ -5,18 +5,19 @@ import android.animation.AnimatorInflater
 import android.animation.AnimatorSet
 import android.annotation.SuppressLint
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 
 class DetailViewPagerAdapter(
     private val cardsList: List<Cards>,
     private val activity: FlipCard,
-    private val btnFlip: Button
 ) : RecyclerView.Adapter<DetailViewPagerAdapter.DetailViewHolder>() {
 
     //declaration for card animation
@@ -24,6 +25,7 @@ class DetailViewPagerAdapter(
     private lateinit var backAnim: AnimatorSet
     private var isFront: Boolean = true
     private val tempList: List<Cards> = cardsList
+
 
     class DetailViewHolder(
         itemView: View
@@ -45,6 +47,7 @@ class DetailViewPagerAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DetailViewHolder {
+
         return DetailViewHolder(
             LayoutInflater.from(parent.context).inflate(
                 R.layout.fragment_card, parent, false
@@ -57,22 +60,29 @@ class DetailViewPagerAdapter(
         val cardArgs: Cards = cardsList[position]
         holder.bind(cardArgs)
 
-        animInit(holder.itemView.context) // Init of the animations
+        // Init of the animations
+        frontAnim = AnimatorInflater.loadAnimator(
+            holder.itemView.context,
+            R.animator.front_animator
+        ) as AnimatorSet
+        backAnim = AnimatorInflater.loadAnimator(
+            holder.itemView.context,
+            R.animator.back_animator
+        ) as AnimatorSet
 
-        //do the flip
         val scale = holder.itemView.context.resources.displayMetrics.density
         holder.cardFront.cameraDistance = 8000 * scale
         holder.cardBack.cameraDistance = 8000 * scale
 
-        btnFlip.setOnClickListener {
-            if (isFront) {
-                isFront = false
-                bindAnimation(holder.cardFront, frontAnim)
-                bindAnimation(holder.cardBack, backAnim)
-            } else {
-                isFront = true
-                bindAnimation(holder.cardBack, frontAnim)
-                bindAnimation(holder.cardFront, backAnim)
+        holder.itemView.apply {
+            setOnClickListener {
+                if (holder.cardFront.alpha == 1.0f) {
+                    bindAnimation(holder.cardFront, frontAnim)
+                    bindAnimation(holder.cardBack, backAnim)
+                } else if (holder.cardBack.alpha == 1.0f) {
+                    bindAnimation(holder.cardBack, frontAnim)
+                    bindAnimation(holder.cardFront, backAnim)
+                }
             }
         }
     }
