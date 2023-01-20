@@ -42,9 +42,6 @@ class ActivityCategory : AppCompatActivity() {
 
     private fun setupViewPager(db: AppDatabase, viewPager: ViewPager2, topicsWithCards: List<TopicsWithCards>, activeTopicId: Int) {
 
-
-
-
         viewPager.adapter = TopicPagerAdapter(supportFragmentManager, lifecycle, topicsWithCards)
         viewPager.currentItem = activeTopicId
         viewPager.offscreenPageLimit = 1
