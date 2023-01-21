@@ -45,6 +45,8 @@ class CategoryAdapter(private val categories: List<CategoryWithTopics>, private 
     override fun getItemCount() = categories.size
 
     private fun setUpTopicList(holder: ViewHolder, topics: List<Topic>) {
+        //val topicsWithAdd = topics as MutableList
+        //topicsWithAdd.add(Topic)
         holder.topicList.apply {
             layoutManager = LinearLayoutManager(holder.topicList.context)
             adapter = TopicAdapter(topics, listener)
