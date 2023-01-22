@@ -24,16 +24,20 @@ class FlipCard : AppCompatActivity() {
 
         cardsViewPager = findViewById(R.id.vp_fragmentHolder)
         val cardsList: List<Cards> = Cards.cardsList(applicationContext)
+        val tempCardList5: List<Cards> = cardsList
 
         val viewPagerAdapter = DetailViewPagerAdapter(cardsList, this)
         cardsViewPager.adapter = viewPagerAdapter
 
+        cardsViewPager.isUserInputEnabled = false
+
         cardsViewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
-                //btnFlip.text = cardsList[position].title
+
             }
         })
 
+        // fade off
         val nextItemVisiblePx = 12f
         val currentItemHorizontalMarginPx = 28f
         val pageTranslationX = nextItemVisiblePx + currentItemHorizontalMarginPx

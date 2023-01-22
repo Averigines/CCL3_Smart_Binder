@@ -1,18 +1,21 @@
 package com.example.myapplication
 
 import Cards
+import android.animation.Animator
 import android.animation.AnimatorInflater
 import android.animation.AnimatorSet
 import android.annotation.SuppressLint
 import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.cardview.widget.CardView
+import androidx.core.animation.addListener
 import androidx.recyclerview.widget.RecyclerView
 
 class DetailViewPagerAdapter(
@@ -23,8 +26,7 @@ class DetailViewPagerAdapter(
     //declaration for card animation
     private lateinit var frontAnim: AnimatorSet
     private lateinit var backAnim: AnimatorSet
-    private var isFront: Boolean = true
-    private val tempList: List<Cards> = cardsList
+    private var animationRunning: Boolean = false
 
 
     class DetailViewHolder(
@@ -61,14 +63,7 @@ class DetailViewPagerAdapter(
         holder.bind(cardArgs)
 
         // Init of the animations
-        frontAnim = AnimatorInflater.loadAnimator(
-            holder.itemView.context,
-            R.animator.front_animator
-        ) as AnimatorSet
-        backAnim = AnimatorInflater.loadAnimator(
-            holder.itemView.context,
-            R.animator.back_animator
-        ) as AnimatorSet
+        animInit(holder.itemView.context)
 
         val scale = holder.itemView.context.resources.displayMetrics.density
         holder.cardFront.cameraDistance = 8000 * scale
@@ -76,22 +71,89 @@ class DetailViewPagerAdapter(
 
         holder.itemView.apply {
             setOnClickListener {
-                if (holder.cardFront.alpha == 1.0f) {
-                    bindAnimation(holder.cardFront, frontAnim)
-                    bindAnimation(holder.cardBack, backAnim)
-                } else if (holder.cardBack.alpha == 1.0f) {
-                    bindAnimation(holder.cardBack, frontAnim)
-                    bindAnimation(holder.cardFront, backAnim)
+                if (!animationRunning) {
+                    if (holder.cardFront.alpha == 1.0f) {
+                        bindAnimation(holder.cardFront, frontAnim)
+                        bindAnimation(holder.cardBack, backAnim)
+                    } else if (holder.cardBack.alpha == 1.0f) {
+                        bindAnimation(holder.cardBack, frontAnim)
+                        bindAnimation(holder.cardFront, backAnim)
+                    }
                 }
             }
         }
+
+        /*
+        holder.itemView.apply {
+            setOnTouchListener(
+                View.OnTouchListener { view, event ->
+
+                    // variables to store current configuration of quote card.
+                    val displayMetrics = activity.resources.displayMetrics
+                    val cardHeight = holder.cardBack.height
+                    val cardStartY = (displayMetrics.heightPixels.toFloat() / 2) - (cardHeight / 2)
+                    val minSwipeDistance = 280
+
+                    when (event.action) {
+
+                        MotionEvent.ACTION_MOVE -> {
+                            // get x coordinate of the touch
+                            val newY = event.rawY
+                            if (holder.cardBack.alpha == 1.0f) {
+                            if (newY < cardStartY) {
+                                Toast.makeText(holder.itemView.context, newY.toString(), Toast.LENGTH_SHORT).show()
+                            } else if (newY > cardStartY + cardHeight) {
+                                Toast.makeText(holder.itemView.context, newY.toString(), Toast.LENGTH_SHORT).show()
+                            }
+                            }
+                        }
+                        MotionEvent.ACTION_UP -> {
+                            if (holder.cardFront.alpha == 1.0f) {
+                                bindAnimation(holder.cardFront, frontAnim)
+                                bindAnimation(holder.cardBack, backAnim)
+                            } else if (holder.cardBack.alpha == 1.0f) {
+                                bindAnimation(holder.cardBack, frontAnim)
+                                bindAnimation(holder.cardFront, backAnim)
+                            }
+                        }
+                    }
+
+                    // required to by-pass lint warning
+                    view.performClick()
+                    return@OnTouchListener true
+                }
+            )
+        }
+
+         */
+
     }
 
     override fun getItemCount() = cardsList.size
 
     private fun bindAnimation(element: CardView, anim: AnimatorSet) {
+        animationRunning = true
         anim.setTarget(element)
         anim.start()
+        anim.addListener(object: Animator.AnimatorListener {
+            override fun onAnimationStart(p0: Animator?) {
+                // not used
+            }
+
+            override fun onAnimationEnd(p0: Animator?) {
+                animationRunning = false
+            }
+
+            override fun onAnimationCancel(p0: Animator?) {
+                // not used
+            }
+
+            override fun onAnimationRepeat(p0: Animator?) {
+                // not used
+            }
+
+        }) // make element clickable at end of anim
+
     }
 
     private fun animInit(context: Context) {
