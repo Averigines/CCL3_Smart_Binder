@@ -7,4 +7,12 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <color name ="project_Raisin_black">#272635</color>
+    <color name ="project_Blizzard_Blue">#B1E5F2</color>
+    <color name ="project_Quick_Silver">#A6A6A8</color>
+    <color name ="project_Light_Grey">#CECECE</color>
+    <color name ="project_Ghost_White">#E8E9F3</color>
+    <color name ="project_Champagne_Pink">#E9D2C0</color>
+    <color name ="project_Teal_Blue">#2D728F</color>
 </resources>

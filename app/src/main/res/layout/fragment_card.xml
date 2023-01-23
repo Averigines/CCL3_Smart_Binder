@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/cl_fragmentLayout"
+    android:background="@color/project_Raisin_black"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -11,6 +12,7 @@
         android:layout_width="300dp"
         android:layout_height="300dp"
         app:cardElevation="0dp"
+        android:backgroundTint="@color/project_Raisin_black"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -22,20 +24,24 @@
             android:layout_height="50dp"
             android:background="@drawable/card_front_title_bg"
             android:gravity="center"
+            android:backgroundTint="@color/project_Teal_Blue"
             tools:text="Title"
-            android:textColor="@color/white"
+            android:textColor="@color/project_Ghost_White"
             android:textAlignment="center"
-            android:textSize="22sp" />
+            android:textStyle="bold"
+            android:textSize="26sp" />
 
         <TextView
             android:id="@+id/tv_cardFrontContent"
             android:layout_width="match_parent"
             android:layout_height="250dp"
             android:background="@drawable/card_front_content_bg"
+            android:backgroundTint="@color/project_Blizzard_Blue"
             android:gravity="center"
             tools:text="Front card"
             android:textAlignment="center"
             android:textSize="22sp"
+            android:textColor="@color/project_Raisin_black"
             android:translationY="50dp" />
     </androidx.cardview.widget.CardView> <!-- card front -->
 
@@ -46,6 +52,7 @@
         app:cardElevation="0dp"
         android:alpha="0"
         android:background="@drawable/card_front_content_bg"
+        android:backgroundTint="@color/project_Raisin_black"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -56,9 +63,10 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/card_back_bg"
+            android:backgroundTint="@color/project_Teal_Blue"
             android:gravity="center"
             tools:text="Back card"
-            android:textColor="@color/white"
+            android:textColor="@color/project_Ghost_White"
             android:textAlignment="center"
             android:textSize="22sp" />
 

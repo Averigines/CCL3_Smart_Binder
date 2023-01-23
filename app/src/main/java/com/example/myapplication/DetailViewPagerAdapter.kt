@@ -7,24 +7,18 @@ import android.animation.AnimatorSet
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Handler
-import android.util.Log
-import android.view.KeyEvent.ACTION_UP
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.MotionEvent
-import android.view.MotionEvent.ACTION_UP
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.cardview.widget.CardView
-import androidx.core.animation.addListener
 import androidx.recyclerview.widget.RecyclerView
 import java.lang.Float.max
 import java.lang.Float.min
-import java.lang.Math.abs
-import kotlin.concurrent.thread
-import kotlin.properties.Delegates
 
 class DetailViewPagerAdapter(
     private val cardsList: List<Cards>,
@@ -85,7 +79,7 @@ class DetailViewPagerAdapter(
         holder.cardBack.cameraDistance = distanceCamera
 
         holder.itemView.apply {
-            setOnTouchListener { view, motionEvent ->
+            setOnTouchListener { _, motionEvent ->
 
                 val displayMetrics = resources.displayMetrics
                 val cardWidth = holder.cardBack.width
@@ -98,11 +92,11 @@ class DetailViewPagerAdapter(
                     }
                     MotionEvent.ACTION_UP -> {
                         cursorLastPosition = motionEvent.rawX
-                        var distY = abs(cursorLastPosition - cursorInitialPosition)
+                        val distY = kotlin.math.abs(cursorLastPosition - cursorInitialPosition)
                         if (holder.isBackFacing()) {
                             if (distY > minSwipeDistance) {
                                 fadeScaleOut(holder.cardBack, 350)
-                                Handler().postDelayed({
+                                Handler(Looper.getMainLooper()).postDelayed({
                                     tempList = tempList.drop(1)
                                     notifyItemRemoved(0)
                                 }, 320)
@@ -115,7 +109,7 @@ class DetailViewPagerAdapter(
                             }
                         }
 
-                        if (abs(cursorLastPosition - cursorInitialPosition) < 2) {
+                        if (kotlin.math.abs(cursorLastPosition - cursorInitialPosition) < 2) {
                             if (!animationRunning) {
                                 val visibleCard =
                                     if (holder.isBackFacing()) holder.cardBack
@@ -131,7 +125,7 @@ class DetailViewPagerAdapter(
                     }
                     MotionEvent.ACTION_MOVE -> {
                         val newX = motionEvent.rawX
-                        val scaleRotation = abs(newX - cursorInitialPosition) / 60
+                        val scaleRotation = kotlin.math.abs(newX - cursorInitialPosition) / 60
 
                         if (!holder.isBackFacing())  // check if card turned
                             return@setOnTouchListener true
@@ -140,7 +134,7 @@ class DetailViewPagerAdapter(
                             return@setOnTouchListener true
 
                         if (newX < cursorInitialPosition) { //swipe left
-                            textView.text = abs(newX - cursorInitialPosition).toString()
+                            textView.text = kotlin.math.abs(newX - cursorInitialPosition).toString()
                             holder.cardBack.animate()
                                 .x(
                                     min(
