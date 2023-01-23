@@ -13,6 +13,8 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.cardview.widget.CardView
@@ -22,7 +24,10 @@ import java.lang.Float.min
 
 class DetailViewPagerAdapter(
     private val cardsList: List<Cards>,
-    private val textView: TextView
+    private val leftCornerGradient: ImageView,
+    private val rightCornerGradient: ImageView,
+    private val leftCornerText: TextView,
+    private val rightCornerText: TextView,
 ) : RecyclerView.Adapter<DetailViewPagerAdapter.DetailViewHolder>() {
 
     //declaration for card animation
@@ -91,6 +96,10 @@ class DetailViewPagerAdapter(
                         cursorInitialPosition = motionEvent.rawX
                     }
                     MotionEvent.ACTION_UP -> {
+                        leftCornerText.alpha = 0f
+                        leftCornerGradient.alpha = 0f
+                        rightCornerText.alpha = 0f
+                        rightCornerGradient.alpha = 0f
                         cursorLastPosition = motionEvent.rawX
                         val distY = kotlin.math.abs(cursorLastPosition - cursorInitialPosition)
                         if (holder.isBackFacing()) {
@@ -126,6 +135,7 @@ class DetailViewPagerAdapter(
                     MotionEvent.ACTION_MOVE -> {
                         val newX = motionEvent.rawX
                         val scaleRotation = kotlin.math.abs(newX - cursorInitialPosition) / 60
+                        val scaleAlpha = kotlin.math.abs(newX - cursorInitialPosition)
 
                         if (!holder.isBackFacing())  // check if card turned
                             return@setOnTouchListener true
@@ -134,7 +144,9 @@ class DetailViewPagerAdapter(
                             return@setOnTouchListener true
 
                         if (newX < cursorInitialPosition) { //swipe left
-                            textView.text = kotlin.math.abs(newX - cursorInitialPosition).toString()
+                            rightCornerText.alpha = 0f
+                            rightCornerGradient.alpha = 0f
+                            cornerAlphaOnMove(leftCornerGradient, leftCornerText, scaleAlpha)
                             holder.cardBack.animate()
                                 .x(
                                     min(
@@ -145,6 +157,9 @@ class DetailViewPagerAdapter(
                                 .setDuration(0)
                                 .start()
                         } else if (newX > cursorInitialPosition) { // swipe right
+                            leftCornerText.alpha = 0f
+                            leftCornerGradient.alpha = 0f
+                            cornerAlphaOnMove(rightCornerGradient, rightCornerText, scaleAlpha)
                             holder.cardBack.animate()
                                 .x(
                                     max(cardStart, newX - (cardWidth / 2))
@@ -162,6 +177,17 @@ class DetailViewPagerAdapter(
     }
 
     override fun getItemCount() = tempList.size
+
+    private fun cornerAlphaOnMove(iv: ImageView, tv: TextView, scale: Float) {
+        iv.animate()
+            .alpha(min(scale* 0.002f, 1f))
+            .setDuration(0)
+            .start()
+        tv.animate()
+            .alpha(min(scale * 0.0007f, 1f))
+            .setDuration(0)
+            .start()
+    }
 
     private fun fadeScaleOut(view: View, duration: Long) {
         view.animate()

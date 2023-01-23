@@ -49,9 +49,5 @@ dependencies {
 
     // ViewPager2
     implementation "androidx.viewpager2:viewpager2:1.0.0"
-    // NLP
-    implementation 'com.theokanning.openai-gpt3-java:client:0.9.0'
-
-    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.5.1'
 
 }
