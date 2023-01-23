@@ -49,6 +49,10 @@ class DetailViewPagerAdapter(
         private val frontContent: TextView = itemView.findViewById(R.id.tv_cardFrontContent)
         private val backContent: TextView = itemView.findViewById(R.id.tv_cardBack)
 
+        fun isBackFacing(): Boolean {
+            return cardBack.alpha == 1.0f
+        }
+
         fun bind(
             card: Cards
         ) {
@@ -76,86 +80,84 @@ class DetailViewPagerAdapter(
         animInit(holder.itemView.context)
 
         val scale = holder.itemView.context.resources.displayMetrics.density
-        holder.cardFront.cameraDistance = 8000 * scale
-        holder.cardBack.cameraDistance = 8000 * scale
-
-        /*
-        holder.itemView.apply {
-            setOnClickListener {
-                if (!animationRunning) {
-                    if (holder.cardFront.alpha == 1.0f) {
-                        bindAnimation(holder.cardFront, frontAnim)
-                        bindAnimation(holder.cardBack, backAnim)
-                    } else if (holder.cardBack.alpha == 1.0f) {
-                        bindAnimation(holder.cardBack, frontAnim)
-                        bindAnimation(holder.cardFront, backAnim)
-                    }
-                }
-            }
-        }
-         */
+        val distanceCamera = 8000 * scale
+        holder.cardFront.cameraDistance = distanceCamera
+        holder.cardBack.cameraDistance = distanceCamera
 
         holder.itemView.apply {
             setOnTouchListener { view, motionEvent ->
 
-                var actionString: String = ""
                 val displayMetrics = resources.displayMetrics
                 val cardWidth = holder.cardBack.width
                 val cardStart = (displayMetrics.widthPixels.toFloat() / 2) - (cardWidth / 2)
                 val minSwipeDistance = 360
 
-                when(motionEvent.action) {
+                when (motionEvent.action) {
                     MotionEvent.ACTION_DOWN -> {
                         cursorInitialPosition = motionEvent.rawX
                     }
                     MotionEvent.ACTION_UP -> {
                         cursorLastPosition = motionEvent.rawX
                         var distY = abs(cursorLastPosition - cursorInitialPosition)
+                        if (holder.isBackFacing()) {
                             if (distY > minSwipeDistance) {
-                                fadeScaleOut(holder.cardBack, 350, tempList)
-                                    Handler().postDelayed({
-                                        tempList = tempList.drop(1)
-                                        notifyItemRemoved(0)
-                                    }, 320)
+                                fadeScaleOut(holder.cardBack, 350)
+                                Handler().postDelayed({
+                                    tempList = tempList.drop(1)
+                                    notifyItemRemoved(0)
+                                }, 320)
                             } else {
                                 holder.cardBack.animate()
-                                    .x(cardStart).duration = 350
-                            }
+                                    .x(cardStart)
+                                    .rotation(0f)
+                                    .duration = 350
 
-                        if (abs(cursorLastPosition - cursorInitialPosition) < 100) {
+                            }
+                        }
+
+                        if (abs(cursorLastPosition - cursorInitialPosition) < 2) {
                             if (!animationRunning) {
-                                if (holder.cardFront.alpha == 1.0f) {
-                                    bindAnimation(holder.cardFront, frontAnim)
-                                    bindAnimation(holder.cardBack, backAnim)
-                                } else if (holder.cardBack.alpha == 1.0f) {
-                                    bindAnimation(holder.cardBack, frontAnim)
-                                    bindAnimation(holder.cardFront, backAnim)
-                                }
+                                val visibleCard =
+                                    if (holder.isBackFacing()) holder.cardBack
+                                    else holder.cardFront
+                                val notVisibleCard =
+                                    if (!holder.isBackFacing()) holder.cardBack
+                                    else holder.cardFront
+
+                                bindAnimation(visibleCard, frontAnim)
+                                bindAnimation(notVisibleCard, backAnim)
                             }
                         }
                     }
-                    MotionEvent.ACTION_MOVE ->{
+                    MotionEvent.ACTION_MOVE -> {
                         val newX = motionEvent.rawX
+                        val scaleRotation = abs(newX - cursorInitialPosition) / 60
 
-                        if (holder.cardBack.alpha == 1.0f) { // check if card turned
-                            if (newX < cardStart + cardWidth) { // check if cursor in card
-                                if (newX < cursorInitialPosition) { //swipe left
-                                    holder.cardBack.animate()
-                                        .x(
-                                            min(cardStart,newX - (cardWidth / 2)
-                                            )
-                                        )
-                                        .setDuration(0)
-                                        .start()
-                                } else if (newX > cursorInitialPosition) { // swipe right
-                                    holder.cardBack.animate()
-                                        .x(
-                                            max(cardStart, newX - (cardWidth / 2))
-                                        )
-                                        .setDuration(0)
-                                        .start()
-                                }
-                            }
+                        if (!holder.isBackFacing())  // check if card turned
+                            return@setOnTouchListener true
+
+                        if (newX >= cardStart + cardWidth) // check if cursor in card
+                            return@setOnTouchListener true
+
+                        if (newX < cursorInitialPosition) { //swipe left
+                            textView.text = abs(newX - cursorInitialPosition).toString()
+                            holder.cardBack.animate()
+                                .x(
+                                    min(
+                                        cardStart, newX - (cardWidth / 2)
+                                    )
+                                )
+                                .rotation(-scaleRotation)
+                                .setDuration(0)
+                                .start()
+                        } else if (newX > cursorInitialPosition) { // swipe right
+                            holder.cardBack.animate()
+                                .x(
+                                    max(cardStart, newX - (cardWidth / 2))
+                                )
+                                .rotation(scaleRotation)
+                                .setDuration(0)
+                                .start()
                         }
                     }
                 }
@@ -163,11 +165,11 @@ class DetailViewPagerAdapter(
             }
         }
 
-        }
+    }
 
     override fun getItemCount() = tempList.size
 
-    private fun fadeScaleOut(view: View, duration: Long, list: List<Cards>) {
+    private fun fadeScaleOut(view: View, duration: Long) {
         view.animate()
             .alpha(0f)
             .scaleY(1.1f)
@@ -178,7 +180,7 @@ class DetailViewPagerAdapter(
         animationRunning = true
         anim.setTarget(element)
         anim.start()
-        anim.addListener(object: Animator.AnimatorListener {
+        anim.addListener(object : Animator.AnimatorListener {
             override fun onAnimationStart(p0: Animator?) {
                 // not used
             }
