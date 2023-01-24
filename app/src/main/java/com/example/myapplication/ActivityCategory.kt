@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.widget.TextView
 import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.RecyclerView
 import androidx.room.Room
@@ -22,6 +23,12 @@ class ActivityCategory : AppCompatActivity() {
         val topics = db.topicDao().getTopicsOfCategory(activeTopic.categoryId)
         val topicsWithCards = db.topicDao().getTopicWithCards(activeTopic.categoryId)
         val activeTopicId = topics.indexOf(activeTopic)
+
+        // set category name
+        val category = db.categoryDao().getById(activeTopic.categoryId)
+        val tvCategoryName: TextView = findViewById(R.id.tvCategoryName)
+        tvCategoryName.text = category.toString()
+
         tempList = arrayListOf()
         for (topic in topicsWithCards) {
             tempList.addAll(topic.cards)
