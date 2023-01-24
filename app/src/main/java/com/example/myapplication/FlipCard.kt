@@ -2,23 +2,17 @@ package com.example.myapplication
 
 import Cards
 import android.annotation.SuppressLint
-import android.os.Build
 import android.os.Bundle
-import android.view.KeyEvent.ACTION_DOWN
 import android.view.MotionEvent
-import android.view.MotionEvent.ACTION_DOWN
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
-import androidx.core.view.isInvisible
 import androidx.viewpager2.widget.ViewPager2
 
 
 private lateinit var cardsViewPager: ViewPager2
-private lateinit var front: CardView
-private lateinit var back: CardView
 
 class FlipCard : AppCompatActivity() {
 
@@ -76,9 +70,5 @@ class FlipCard : AppCompatActivity() {
             page.alpha = 0.25f + (1 - kotlin.math.abs(position))
         }
         cardsViewPager.setPageTransformer(cardTransformer)
-    }
-
-    private fun setOnTouchListener(function: (View, MotionEvent) -> Unit) {
-
     }
 }
