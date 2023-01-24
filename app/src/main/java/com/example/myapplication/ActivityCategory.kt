@@ -27,7 +27,7 @@ class ActivityCategory : AppCompatActivity() {
         // set category name
         val category = db.categoryDao().getById(activeTopic.categoryId)
         val tvCategoryName: TextView = findViewById(R.id.tvCategoryName)
-        tvCategoryName.text = category.toString()
+        tvCategoryName.text = category.name
 
         tempList = arrayListOf()
         for (topic in topicsWithCards) {
