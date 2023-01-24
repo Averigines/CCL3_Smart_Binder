@@ -3,7 +3,13 @@ package com.example.myapplication
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Gravity
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.Button
+import android.widget.EditText
+import android.widget.PopupWindow
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.children
@@ -22,17 +28,40 @@ class MainActivity : AppCompatActivity(), OnTopicClickListener {
 
         //addData(db)
 
-        val cl = findViewById<ConstraintLayout>(R.id.clMain)
-        val allTopics = db.topicDao().getAll()
-        val categoriesWithTopics = db.categoryDao().getCategoriesWithTopics()
-        val allCards = db.cardDao().getAll()
+        var categoriesWithTopics = db.categoryDao().getCategoriesWithTopics()
+
+        val categoryWithTopicsWithCards = db.categoryDao().getCategoriesWithTopicsWithCards()
+
+        val inflater = LayoutInflater.from(this)
+        val contentView = inflater.inflate(R.layout.popup_new_category, null)
+        val popup = PopupWindow(contentView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, true)
+
+        val btnAddCategory = contentView.findViewById<Button>(R.id.btnAddCategory)
+        val etCategory = contentView.findViewById<EditText>(R.id.etCategory)
 
         val recyclerView = findViewById<RecyclerView>(R.id.rv)
-        recyclerView.adapter = CategoryAdapter(categoriesWithTopics, this)
+        recyclerView.adapter = CategoryAdapter(categoryWithTopicsWithCards, this, db)
 
         findViewById<Button>(R.id.btnAddCard).setOnClickListener {
             startActivity(Intent(this, ActivityAddCard::class.java))
         }
+
+        findViewById<com.google.android.material.floatingactionbutton.FloatingActionButton>(R.id.fabAddCategory).setOnClickListener {
+            popup.isOutsideTouchable = false
+            popup.showAtLocation(window.decorView, Gravity.CENTER, 0, 0)
+        }
+
+        btnAddCategory.setOnClickListener {
+                val categoryName = etCategory.text.toString()
+                val newCategory = Category(0, categoryName)
+                db.categoryDao().insert(newCategory)
+                categoriesWithTopics = db.categoryDao().getCategoriesWithTopics()
+                val newAdapter = CategoryAdapter(categoryWithTopicsWithCards, this, db)
+                val currState = recyclerView.layoutManager?.onSaveInstanceState()
+                recyclerView.adapter = newAdapter
+                recyclerView.layoutManager?.onRestoreInstanceState(currState)
+                popup.dismiss()
+            }
     }
     override fun onTopicClick(topic: Topic) {
 

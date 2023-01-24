@@ -9,7 +9,7 @@ import java.io.Serializable
 data class Category(
     @PrimaryKey(autoGenerate = true) val id: Int,
     val name: String
-)
+) : Serializable
 
 @Entity(foreignKeys = [ForeignKey(entity = Category::class,
     parentColumns = arrayOf("id"),
@@ -33,6 +33,25 @@ data class Card(
     val title: String,
     val content: String,
     val topicId: Int
+) : Serializable
+
+data class TopicWithCards(
+    @Embedded val topic: Topic,
+    @Relation(
+        parentColumn = "id",
+        entityColumn = "topicId"
+    )
+    var cards: List<Card>
+)
+
+data class CategoryWithTopicsWithCards(
+    @Embedded val category: Category,
+    @Relation(
+        entity = Topic::class,
+        parentColumn = "id",
+        entityColumn = "categoryId"
+    )
+    var topics: List<TopicWithCards>
 )
 
 data class CategoryWithTopics(
@@ -41,16 +60,7 @@ data class CategoryWithTopics(
         parentColumn = "id",
         entityColumn = "categoryId"
     )
-    val topics: List<Topic>
-)
-
-data class TopicsWithCards(
-    @Embedded val topics: Topic,
-    @Relation(
-        parentColumn = "id",
-        entityColumn = "topicId"
-    )
-    val cards: List<Card>
+    var topics: List<Topic>
 )
 
 @Dao
@@ -62,6 +72,10 @@ interface CategoryDao {
     @Transaction
     @Query("SELECT * FROM category")
     fun getCategoriesWithTopics(): List<CategoryWithTopics>
+
+    @Transaction
+    @Query("SELECT * FROM category")
+    fun getCategoriesWithTopicsWithCards(): List<CategoryWithTopicsWithCards>
 
     @Query("SELECT * FROM category WHERE id = :id")
     fun getById(id: Int): Category
@@ -86,7 +100,7 @@ interface TopicDao {
 
     @Transaction
     @Query("SELECT * FROM topic WHERE categoryId = :id")
-    fun getTopicWithCards(id: Int): List<TopicsWithCards>
+    fun getTopicWithCards(id: Int): List<TopicWithCards>
 
     @Query("SELECT * FROM topic WHERE id = :id")
     fun getById(id: Int): Topic

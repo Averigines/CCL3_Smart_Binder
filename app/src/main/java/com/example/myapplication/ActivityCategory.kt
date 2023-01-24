@@ -30,19 +30,21 @@ class ActivityCategory : AppCompatActivity() {
 
         setupViewPager(db, viewPager, topicsWithCards, activeTopicId)
 
-        val btnAdd = findViewById<Button>(R.id.btnAddCard)
+        val btnAdd = findViewById<com.google.android.material.floatingactionbutton.FloatingActionButton>(R.id.fabAddCard)
         btnAdd.setOnClickListener {
             val currTopicPos = viewPager.currentItem
             val currTopic = topics[currTopicPos]
+            val currCategory = db.categoryDao().getById(currTopic.categoryId)
             val intent = Intent(this, ActivityAddCard::class.java)
             intent.putExtra("topic", currTopic)
+            intent.putExtra("category", currCategory)
             startActivity(intent)
         }
     }
 
-    private fun setupViewPager(db: AppDatabase, viewPager: ViewPager2, topicsWithCards: List<TopicsWithCards>, activeTopicId: Int) {
+    private fun setupViewPager(db: AppDatabase, viewPager: ViewPager2, topicWithCards: List<TopicWithCards>, activeTopicId: Int) {
 
-        viewPager.adapter = TopicPagerAdapter(supportFragmentManager, lifecycle, topicsWithCards)
+        viewPager.adapter = TopicPagerAdapter(supportFragmentManager, lifecycle, topicWithCards)
         viewPager.currentItem = activeTopicId
         viewPager.offscreenPageLimit = 1
 

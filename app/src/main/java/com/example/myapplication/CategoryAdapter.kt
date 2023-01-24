@@ -1,11 +1,14 @@
 package com.example.myapplication
 
-import android.content.Intent
+import android.text.Editable
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.EditText
+import android.widget.PopupWindow
 import android.widget.TextView
-import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
@@ -13,12 +16,17 @@ interface OnTopicClickListener {
     fun onTopicClick(topic: Topic)
 }
 
-class CategoryAdapter(private val categories: List<CategoryWithTopics>, private val listener: OnTopicClickListener) :
+interface OnTopicAddClickListener {
+    fun onTopicAddClick(topicName: String)
+}
+
+class CategoryAdapter(private val data: List<CategoryWithTopicsWithCards>, private val topicListener: OnTopicClickListener, private val db: AppDatabase) :
     RecyclerView.Adapter<CategoryAdapter.ViewHolder>() {
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val categoryName: TextView = itemView.findViewById(R.id.tvCategory)
         val topicList: RecyclerView = itemView.findViewById(R.id.rvTopics)
+        val fabAddTopic: com.google.android.material.floatingactionbutton.FloatingActionButton = itemView.findViewById(R.id.fabAddTopic)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -28,33 +36,59 @@ class CategoryAdapter(private val categories: List<CategoryWithTopics>, private 
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val category = categories[position]
-        holder.categoryName.text = category.category.name
+        val category = data[position].category
+
+        // For displaying amount of topics per category
+        val topicSize = data[position].topics.size
+
+        holder.categoryName.text = category.name
         holder.topicList.visibility = View.GONE
-        holder.itemView.setOnClickListener {
+        holder.fabAddTopic.visibility = View.GONE
+
+        val inflater = LayoutInflater.from(holder.itemView.context)
+        val contentView = inflater.inflate(R.layout.popup_new_topic, null)
+        val btnAddTopic = contentView.findViewById<Button>(R.id.btnAddTopic)
+        val etTopic = contentView.findViewById<EditText>(R.id.etTopic)
+        val popup = PopupWindow(contentView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, true)
+
+        holder.fabAddTopic.setOnClickListener {
+            popup.isOutsideTouchable = false
+            popup.showAtLocation(holder.itemView, Gravity.CENTER, 0, 0)
+        }
+
+        btnAddTopic.setOnClickListener {
+            val topicName = etTopic.text.toString()
+            val newTopic = TopicWithCards(Topic(0, topicName, category.id), emptyList())
+            db.topicDao().insert(Topic(0, topicName, category.id))
+            data[position].topics += newTopic
+            notifyItemChanged(position)
+            popup.dismiss()
+
+        }
+        holder.categoryName.setOnClickListener {
             if(holder.topicList.visibility == View.GONE) {
-                setUpTopicList(holder, category.topics)
+                setUpTopicList(holder, data[position].topics)
                 holder.topicList.visibility = View.VISIBLE
+                holder.fabAddTopic.visibility = View.VISIBLE
             }
             else {
                 holder.topicList.visibility = View.GONE
+                holder.fabAddTopic.visibility = View.GONE
             }
         }
     }
 
-    override fun getItemCount() = categories.size
+    override fun getItemCount() = data.size
 
-    private fun setUpTopicList(holder: ViewHolder, topics: List<Topic>) {
-        //val topicsWithAdd = topics as MutableList
-        //topicsWithAdd.add(Topic)
+    private fun setUpTopicList(holder: ViewHolder, topicWithCards: List<TopicWithCards>) {
         holder.topicList.apply {
             layoutManager = LinearLayoutManager(holder.topicList.context)
-            adapter = TopicAdapter(topics, listener)
+            adapter = TopicAdapter(topicWithCards, topicListener)
         }
     }
 }
 
-class TopicAdapter(private val topics: List<Topic>, private val listener: OnTopicClickListener) :
+class TopicAdapter(private val topics: List<TopicWithCards>, private val listener: OnTopicClickListener) :
     RecyclerView.Adapter<TopicAdapter.ViewHolder>() {
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -68,7 +102,11 @@ class TopicAdapter(private val topics: List<Topic>, private val listener: OnTopi
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val topic = topics[position]
+        val topic = topics[position].topic
+
+        // For displaying cards per topic
+        val cardSize = topics[position].cards.size
+
         holder.topicName.text = topic.name
         holder.itemView.setOnClickListener {
             listener.onTopicClick(topic)
