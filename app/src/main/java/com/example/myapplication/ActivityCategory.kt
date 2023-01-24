@@ -1,0 +1,64 @@
+package com.example.myapplication
+
+import android.content.Context
+import android.content.Intent
+import android.graphics.Rect
+import androidx.appcompat.app.AppCompatActivity
+import android.os.Bundle
+import android.view.View
+import android.widget.Button
+import androidx.annotation.DimenRes
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.Lifecycle
+import androidx.recyclerview.widget.RecyclerView
+import androidx.room.Room
+import androidx.viewpager2.adapter.FragmentStateAdapter
+import androidx.viewpager2.widget.ViewPager2
+import java.lang.Math.abs
+
+class ActivityCategory : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_category)
+        val db = Room.databaseBuilder(this, AppDatabase::class.java, "smartBinderDB").allowMainThreadQueries().build()
+        val viewPager = findViewById<ViewPager2>(R.id.viewPager)
+        val activeTopic = intent.getSerializableExtra("topic") as Topic
+        val topics = db.topicDao().getTopicsOfCategory(activeTopic.categoryId)
+        val topicsWithCards = db.topicDao().getTopicWithCards(activeTopic.categoryId)
+        val activeTopicId = topics.indexOf(activeTopic)
+
+        setupViewPager(db, viewPager, topicsWithCards, activeTopicId)
+
+        val btnAdd = findViewById<com.google.android.material.floatingactionbutton.FloatingActionButton>(R.id.fabAddCard)
+        btnAdd.setOnClickListener {
+            val currTopicPos = viewPager.currentItem
+            val currTopic = topics[currTopicPos]
+            val currCategory = db.categoryDao().getById(currTopic.categoryId)
+            val intent = Intent(this, ActivityAddCard::class.java)
+            intent.putExtra("topic", currTopic)
+            intent.putExtra("category", currCategory)
+            startActivity(intent)
+        }
+    }
+
+    private fun setupViewPager(db: AppDatabase, viewPager: ViewPager2, topicWithCards: List<TopicWithCards>, activeTopicId: Int) {
+
+        viewPager.adapter = TopicPagerAdapter(supportFragmentManager, lifecycle, topicWithCards)
+        viewPager.currentItem = activeTopicId
+        viewPager.offscreenPageLimit = 1
+
+        val nextItemVisiblePx = resources.getDimension(R.dimen.viewpager_next_item_visible)
+        val currentItemHorizontalMarginPx = resources.getDimension(R.dimen.viewpager_current_item_horizontal_margin)
+        val pageTranslationX = nextItemVisiblePx + currentItemHorizontalMarginPx
+        val pageTransformer = ViewPager2.PageTransformer { page: View, position: Float ->
+            page.translationX = -pageTranslationX * position
+            page.alpha = 0.25f + (1 - kotlin.math.abs(position))
+        }
+        viewPager.setPageTransformer(pageTransformer)
+        val itemDecoration = HorizontalMarginItemDecoration(this, R.dimen.viewpager_current_item_horizontal_margin
+        )
+        viewPager.addItemDecoration(itemDecoration)
+    }
+}
+
