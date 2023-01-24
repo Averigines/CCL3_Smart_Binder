@@ -26,7 +26,10 @@ class ActivityAddCard : AppCompatActivity() {
         val contentView = inflater.inflate(R.layout.popup_new_category, null)
         val popup = PopupWindow(contentView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, true)
 
-        val allCategories = db.categoryDao().getAll()
+        val btnAddCategory = contentView.findViewById<Button>(R.id.btnAddCategory)
+        val etCategory = contentView.findViewById<EditText>(R.id.etCategory)
+
+        var allCategories = db.categoryDao().getAll()
         val categoryNames = ArrayList<String>()
         for(category in allCategories) {
             categoryNames.add(category.name)
@@ -49,6 +52,15 @@ class ActivityAddCard : AppCompatActivity() {
                     break
                 }
             }
+        }
+
+        btnAddCategory.setOnClickListener {
+            val categoryName = etCategory.text.toString()
+            val newCategory = Category(0, categoryName)
+            db.categoryDao().insert(newCategory)
+            allCategories = db.categoryDao().getAll()
+            popup.dismiss()
+            spinnerCategories.setSelection(allCategories.size-1)
         }
 
         lateinit var relatedTopics: List<Topic>
