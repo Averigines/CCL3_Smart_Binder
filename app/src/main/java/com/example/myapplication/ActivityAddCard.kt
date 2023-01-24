@@ -23,6 +23,8 @@ class ActivityAddCard : AppCompatActivity() {
             AppDatabase::class.java, "smartBinderDB"
         ).allowMainThreadQueries().build()
 
+        var fromCategories = false
+
         val allCategories = db.categoryDao().getAll()
         val categoryNames = ArrayList<String>()
         for(category in allCategories) {
@@ -63,6 +65,7 @@ class ActivityAddCard : AppCompatActivity() {
                 spinnerTopicsAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                 spinnerTopics.adapter = spinnerTopicsAdapter
                 if (intent.hasExtra("topic")) {
+                    fromCategories = true
                     val activeTopic = intent.getSerializableExtra("topic") as Topic
                     intent.removeExtra("topic")
                     val activeTopicIndex: Int
@@ -85,9 +88,29 @@ class ActivityAddCard : AppCompatActivity() {
         val etContent = findViewById<EditText>(R.id.etContent)
 
         findViewById<Button>(R.id.btnAddCard).setOnClickListener {
-            db.cardDao().insert(Card(0,etTitle.text.toString(), etContent.text.toString(),relatedTopics[spinnerTopics.selectedItemPosition].id))
-            Toast.makeText(this, "Card successfully added!", Toast.LENGTH_SHORT).show()
-            startActivity(Intent(this, MainActivity::class.java))
+            if (etTitle.text.toString() == "" && etContent.text.toString() == "") {
+            Toast.makeText(this, "Please provide a Title and Content for your card!", Toast.LENGTH_SHORT).show()
+            }
+            else if (etTitle.text.toString() == "") {
+                Toast.makeText(this, "Please provide a Title for your card!", Toast.LENGTH_SHORT).show()
+            }
+            else if (etContent.text.toString() == "") {
+                Toast.makeText(this, "Please provide content for your card!", Toast.LENGTH_SHORT).show()
+            }
+            else {
+                db.cardDao().insert(Card(0,etTitle.text.toString(), etContent.text.toString(),relatedTopics[spinnerTopics.selectedItemPosition].id))
+                Toast.makeText(this, "Card successfully added!", Toast.LENGTH_SHORT).show()
+                if (fromCategories) {
+                    val selectedTopicName = spinnerTopics.selectedItem.toString()
+                    val selectedTopic = db.topicDao().getTopicByName(selectedTopicName)
+                    val intent = Intent(this, ActivityCategory::class.java)
+                    intent.putExtra("topic", selectedTopic)
+                    startActivity(intent)
+                }
+                else {
+                    startActivity(Intent(this, MainActivity::class.java))
+                }
+            }
         }
     }
 }
