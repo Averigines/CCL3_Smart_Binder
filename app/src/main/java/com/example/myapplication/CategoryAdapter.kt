@@ -25,6 +25,7 @@ class CategoryAdapter(private val data: List<CategoryWithTopicsWithCards>, priva
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val categoryName: TextView = itemView.findViewById(R.id.tvCategory)
+        val categoryChildCount: TextView = itemView.findViewById(R.id.tvCategoryChildCount)
         val topicList: RecyclerView = itemView.findViewById(R.id.rvTopics)
         val fabAddTopic: com.google.android.material.floatingactionbutton.FloatingActionButton = itemView.findViewById(R.id.fabAddTopic)
     }
@@ -41,6 +42,7 @@ class CategoryAdapter(private val data: List<CategoryWithTopicsWithCards>, priva
         // For displaying amount of topics per category
         val topicSize = data[position].topics.size
 
+        holder.categoryChildCount.text = topicSize.toString()
         holder.categoryName.text = category.name
         holder.topicList.visibility = View.GONE
         holder.fabAddTopic.visibility = View.GONE
@@ -93,6 +95,7 @@ class TopicAdapter(private val topics: List<TopicWithCards>, private val listene
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val topicName: TextView = itemView.findViewById(R.id.topic_name)
+        val topicChildCount: TextView = itemView.findViewById(R.id.tvTopicChildCount)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -107,6 +110,7 @@ class TopicAdapter(private val topics: List<TopicWithCards>, private val listene
         // For displaying cards per topic
         val cardSize = topics[position].cards.size
 
+        holder.topicChildCount.text = cardSize.toString()
         holder.topicName.text = topic.name
         holder.itemView.setOnClickListener {
             listener.onTopicClick(topic)
