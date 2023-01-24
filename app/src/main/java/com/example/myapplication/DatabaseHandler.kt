@@ -29,7 +29,7 @@ data class Topic(
     onDelete = CASCADE)]
 )
 data class Card(
-    @PrimaryKey(autoGenerate = true) val id: Int,
+    @PrimaryKey(autoGenerate = true) var id: Int,
     val title: String,
     val content: String,
     val topicId: Int
