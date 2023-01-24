@@ -3,14 +3,11 @@ package com.example.myapplication
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.Button
-import android.widget.EditText
-import android.widget.Spinner
-import android.widget.Toast
+import android.view.ViewGroup
+import android.widget.*
 import androidx.room.Room
 
 class ActivityAddCard : AppCompatActivity() {
@@ -25,6 +22,10 @@ class ActivityAddCard : AppCompatActivity() {
 
         var fromCategories = false
 
+        val inflater = LayoutInflater.from(this)
+        val contentView = inflater.inflate(R.layout.popup_new_category, null)
+        val popup = PopupWindow(contentView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, true)
+
         val allCategories = db.categoryDao().getAll()
         val categoryNames = ArrayList<String>()
         for(category in allCategories) {
@@ -33,7 +34,7 @@ class ActivityAddCard : AppCompatActivity() {
 
         val spinnerCategories: Spinner = findViewById(R.id.spinnerCategory)
         val spinnerTopics: Spinner = findViewById(R.id.spinnerTopic)
-        val spinnerOptions = categoryNames.toTypedArray()
+        val spinnerOptions = categoryNames.toTypedArray() + "New Category"
         val spinnerAdapter = ArrayAdapter(this, R.layout.spinner_item, spinnerOptions)
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinnerCategories.adapter = spinnerAdapter
@@ -54,26 +55,33 @@ class ActivityAddCard : AppCompatActivity() {
 
         spinnerCategories.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
-                val selectedCategory = allCategories[position]
-                relatedTopics = db.topicDao().getTopicsOfCategory(selectedCategory.id)
-                val topicNames = ArrayList<String>()
-                for(topic in relatedTopics) {
-                    topicNames.add(topic.name)
+                if (position >= allCategories.size) {
+                    Toast.makeText(view.context, "New category selected", Toast.LENGTH_SHORT).show()
+                    popup.isOutsideTouchable = false
+                    popup.showAtLocation(window.decorView, Gravity.CENTER, 0, 0)
                 }
-                val spinnerTopicsOptions = topicNames.toTypedArray()
-                val spinnerTopicsAdapter = ArrayAdapter(view.context, R.layout.spinner_item, spinnerTopicsOptions)
-                spinnerTopicsAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-                spinnerTopics.adapter = spinnerTopicsAdapter
-                if (intent.hasExtra("topic")) {
-                    fromCategories = true
-                    val activeTopic = intent.getSerializableExtra("topic") as Topic
-                    intent.removeExtra("topic")
-                    val activeTopicIndex: Int
-                    for (i in relatedTopics.indices) {
-                        if (relatedTopics[i].name == activeTopic.name) {
-                            activeTopicIndex = i
-                            spinnerTopics.setSelection(activeTopicIndex)
-                            break
+                else {
+                    val selectedCategory = allCategories[position]
+                    relatedTopics = db.topicDao().getTopicsOfCategory(selectedCategory.id)
+                    val topicNames = ArrayList<String>()
+                    for(topic in relatedTopics) {
+                        topicNames.add(topic.name)
+                    }
+                    val spinnerTopicsOptions = topicNames.toTypedArray()
+                    val spinnerTopicsAdapter = ArrayAdapter(view.context, R.layout.spinner_item, spinnerTopicsOptions)
+                    spinnerTopicsAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                    spinnerTopics.adapter = spinnerTopicsAdapter
+                    if (intent.hasExtra("topic")) {
+                        fromCategories = true
+                        val activeTopic = intent.getSerializableExtra("topic") as Topic
+                        intent.removeExtra("topic")
+                        val activeTopicIndex: Int
+                        for (i in relatedTopics.indices) {
+                            if (relatedTopics[i].name == activeTopic.name) {
+                                activeTopicIndex = i
+                                spinnerTopics.setSelection(activeTopicIndex)
+                                break
+                            }
                         }
                     }
                 }
