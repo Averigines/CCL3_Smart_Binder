@@ -43,7 +43,7 @@ class MainActivity : AppCompatActivity(), OnTopicClickListener {
         recyclerView.adapter = CategoryAdapter(categoryWithTopicsWithCards, this, db)
 
         findViewById<Button>(R.id.btnAddCard).setOnClickListener {
-            startActivity(Intent(this, ActivityAddCard::class.java))
+            startActivity(Intent(this, FlipCard::class.java))
         }
 
         findViewById<com.google.android.material.floatingactionbutton.FloatingActionButton>(R.id.fabAddCategory).setOnClickListener {
