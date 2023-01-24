@@ -33,7 +33,7 @@
     <EditText
         android:id="@+id/etTopic"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="48dp"
         android:hint="Topic name"
         android:textStyle="italic"
         app:layout_constraintTop_toBottomOf="@id/tvTopic"
@@ -55,6 +55,18 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/etTopic" />
+
+        <ImageButton
+            android:id="@+id/imageButton"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:backgroundTint="#00FFFFFF"
+            android:padding="0dp"
+            android:layout_margin="0dp"
+            app:layout_constraintBottom_toBottomOf="@+id/tvTopic"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tvTopic"
+            app:srcCompat="@drawable/ic_baseline_cancel_24" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

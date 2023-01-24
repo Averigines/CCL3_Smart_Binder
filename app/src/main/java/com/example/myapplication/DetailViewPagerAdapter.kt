@@ -12,18 +12,15 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import java.lang.Float.max
 import java.lang.Float.min
 
 class DetailViewPagerAdapter(
-    private val cardsList: List<Cards>,
+    cardsList: List<Cards>,
     private val leftCornerGradient: ImageView,
     private val rightCornerGradient: ImageView,
     private val leftCornerText: TextView,

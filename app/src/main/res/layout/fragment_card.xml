@@ -40,7 +40,7 @@
             android:gravity="center"
             tools:text="Front card"
             android:textAlignment="center"
-            android:textSize="22sp"
+            android:textSize="18sp"
             android:textColor="@color/project_Raisin_black"
             android:translationY="50dp" />
     </androidx.cardview.widget.CardView> <!-- card front -->
@@ -64,11 +64,11 @@
             android:layout_height="match_parent"
             android:background="@drawable/card_back_bg"
             android:backgroundTint="@color/project_Teal_Blue"
-            android:gravity="center"
+            android:gravity="center_vertical"
             tools:text="Back card"
             android:textColor="@color/project_Ghost_White"
-            android:textAlignment="center"
-            android:textSize="22sp" />
+            android:padding="24dp"
+            android:textSize="18sp" />
 
     </androidx.cardview.widget.CardView> <!-- card back -->
 
