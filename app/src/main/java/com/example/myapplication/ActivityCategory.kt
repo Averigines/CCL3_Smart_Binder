@@ -1,37 +1,35 @@
 package com.example.myapplication
 
-import android.content.Context
 import android.content.Intent
-import android.graphics.Rect
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import android.widget.Button
-import androidx.annotation.DimenRes
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.lifecycle.Lifecycle
+import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.RecyclerView
 import androidx.room.Room
-import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
-import java.lang.Math.abs
+import java.util.*
+import kotlin.collections.ArrayList
 
 class ActivityCategory : AppCompatActivity() {
+    lateinit var tempList : ArrayList<Card>
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_category)
         val db = Room.databaseBuilder(this, AppDatabase::class.java, "smartBinderDB").allowMainThreadQueries().build()
         val viewPager = findViewById<ViewPager2>(R.id.viewPager)
-        val activeTopic = intent.getSerializableExtra("topic") as Topic
+        var activeTopic = intent.getSerializableExtra("topic") as Topic
         val topics = db.topicDao().getTopicsOfCategory(activeTopic.categoryId)
         val topicsWithCards = db.topicDao().getTopicWithCards(activeTopic.categoryId)
         val activeTopicId = topics.indexOf(activeTopic)
+        tempList = arrayListOf()
+        for (topic in topicsWithCards) {
+            tempList.addAll(topic.cards)
+        }
+        setupViewPager(viewPager, topicsWithCards, activeTopicId)
 
-        setupViewPager(db, viewPager, topicsWithCards, activeTopicId)
-
-        val btnAdd = findViewById<com.google.android.material.floatingactionbutton.FloatingActionButton>(R.id.fabAddCard)
-        btnAdd.setOnClickListener {
+        val fabAddCard = findViewById<com.google.android.material.floatingactionbutton.FloatingActionButton>(R.id.fabAddCard)
+        fabAddCard.setOnClickListener {
             val currTopicPos = viewPager.currentItem
             val currTopic = topics[currTopicPos]
             val currCategory = db.categoryDao().getById(currTopic.categoryId)
@@ -40,9 +38,51 @@ class ActivityCategory : AppCompatActivity() {
             intent.putExtra("category", currCategory)
             startActivity(intent)
         }
+
+        val sv = findViewById<SearchView>(R.id.etSearch)
+        val rvCards = findViewById<RecyclerView>(R.id.rvCards)
+        rvCards.adapter = CardAdapter(tempList)
+
+        sv.setOnQueryTextListener (object: SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                TODO("Not yet implemented")
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                tempList.clear()
+                val searchText = newText!!.lowercase(Locale.getDefault())
+                if (searchText.isNotEmpty()) {
+
+                    rvCards.visibility = View.VISIBLE
+                    fabAddCard.visibility = View.GONE
+                    viewPager.visibility = View.GONE
+
+                    for (topic in topicsWithCards) {
+                        topic.cards.forEach {
+                            if(it.title.lowercase(Locale.getDefault()).contains(searchText) || it.content.lowercase(Locale.getDefault()).contains((searchText))) {
+                                tempList.add(it)
+                            }
+                        }
+                    }
+                    rvCards.adapter!!.notifyDataSetChanged()
+                }
+                else {
+                    rvCards.visibility = View.GONE
+                    fabAddCard.visibility = View.VISIBLE
+                    viewPager.visibility = View.VISIBLE
+                    tempList.clear()
+                    for (topic in topicsWithCards) {
+                        tempList.addAll(topic.cards)
+                    }
+                    rvCards.adapter!!.notifyDataSetChanged()
+                }
+                return false
+            }
+
+        })
     }
 
-    private fun setupViewPager(db: AppDatabase, viewPager: ViewPager2, topicWithCards: List<TopicWithCards>, activeTopicId: Int) {
+    private fun setupViewPager(viewPager: ViewPager2, topicWithCards: List<TopicWithCards>, activeTopicId: Int) {
 
         viewPager.adapter = TopicPagerAdapter(supportFragmentManager, lifecycle, topicWithCards)
         viewPager.currentItem = activeTopicId
@@ -59,6 +99,7 @@ class ActivityCategory : AppCompatActivity() {
         val itemDecoration = HorizontalMarginItemDecoration(this, R.dimen.viewpager_current_item_horizontal_margin
         )
         viewPager.addItemDecoration(itemDecoration)
+
     }
 }
 
