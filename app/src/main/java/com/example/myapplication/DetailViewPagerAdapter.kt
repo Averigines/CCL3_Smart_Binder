@@ -15,21 +15,26 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.cardview.widget.CardView
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.room.Room
 import java.lang.Float.max
 import java.lang.Float.min
 
 class DetailViewPagerAdapter(
-    cardsList: List<Card>,
+    private val cardsList: List<Card>,
     private val leftCornerGradient: ImageView,
     private val rightCornerGradient: ImageView,
     private val leftCornerText: TextView,
     private val rightCornerText: TextView,
+    private val db: AppDatabase,
     private val dao: TopicDao,
     private val daoCategory: CategoryDao,
     private val tvCategory: TextView,
-    private val infoBtn: TextView
+    private val infoBtn: TextView,
+    private val tvScoreInt: TextView,
+    private val cvScore: CardView,
+    private val rvScore: RecyclerView
 ) : RecyclerView.Adapter<DetailViewHolder>() {
 
     //declaration for card animation
@@ -39,7 +44,7 @@ class DetailViewPagerAdapter(
     private var cursorInitialPosition: Float = 0f
     private var cursorLastPosition: Float = 0f
     var swipeLeft: Boolean = false
-    val listCardsError: MutableList<Card> = mutableListOf()
+    private val listCardsError: MutableList<Card> = mutableListOf()
     private var tempList: List<Card> = cardsList
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DetailViewHolder {
@@ -59,7 +64,6 @@ class DetailViewPagerAdapter(
         // Init of the animations
         animInit(holder.itemView.context)
 
-        var points = tempList.size
         val scale = holder.itemView.context.resources.displayMetrics.density
         val distanceCamera = 8000 * scale
         holder.cardFront.cameraDistance = distanceCamera
@@ -88,16 +92,17 @@ class DetailViewPagerAdapter(
                         if (holder.isBackFacing()) {
                             if (distY > minSwipeDistance) {
                                 if (swipeLeft) {
-                                    points -= 1
                                     listCardsError.add(tempList[position])
+                                    addCardToScoreTable(false, tempList[position])
+                                } else {
+                                    addCardToScoreTable(true, tempList[position])
                                 }
                                 fadeScaleOut(holder.cardBack, 350)
                                 Handler(Looper.getMainLooper()).postDelayed({
                                     tempList = tempList.drop(1)
                                     notifyItemRemoved(0)
                                     if (tempList.isEmpty()) {
-                                        // do something  (display results)
-                                        tvCategory.visibility = View.GONE
+                                        displayScoreAndHideViews(listCardsError, holder)
                                     }
                                 }, 320)
                             } else {
@@ -169,6 +174,30 @@ class DetailViewPagerAdapter(
 
     override fun getItemCount() = tempList.size
 
+    private fun addCardToScoreTable(success: Boolean, card: Card) {
+        val topic = dao.getById(card.topicId)
+        val category = daoCategory.getById(topic.categoryId)
+
+        val newCardResult = CardResult(0, card.id, category.id, success)
+        db.CardResultDao().insert(newCardResult)
+    }
+
+    private fun setListErrorCards(holder: DetailViewHolder, listErrorCards: List<Card>) {
+        rvScore.apply {
+            layoutManager = LinearLayoutManager(holder.itemView.context)
+            adapter = ErrorCardsList(listErrorCards, dao, daoCategory)
+        }
+    }
+
+    private fun displayScoreAndHideViews(errorCardsList: List<Card>, holder: DetailViewHolder) {
+        tvScoreInt.text = "Your score:   " + (cardsList.size - listCardsError.size).toString() + " / " + cardsList.size.toString()
+        // do something  (display results)
+        setListErrorCards(holder, errorCardsList)
+        cvScore.visibility = View.VISIBLE
+        tvCategory.visibility = View.GONE
+        infoBtn.visibility = View.GONE
+    }
+
     private fun cornerAlphaOnMove(iv: ImageView, tv: TextView, scale: Float) {
         iv.animate()
             .alpha(min(scale * 0.002f, 1f))
@@ -213,25 +242,11 @@ class DetailViewPagerAdapter(
 
     }
 
-    private fun displayResultAndHideAllViews() {
-        infoBtn.visibility = View.GONE
-    }
-
     private fun cornerAlphaTo0() {
         leftCornerText.alpha = 0f
         leftCornerGradient.alpha = 0f
         rightCornerText.alpha = 0f
         rightCornerGradient.alpha = 0f
-    }
-
-    private fun cornerAlphaTo1(side: String) {
-        if (side == "right") {
-            rightCornerText.alpha = 1f
-            rightCornerGradient.alpha = 1f
-        } else {
-            leftCornerText.alpha = 1f
-            leftCornerGradient.alpha = 1f
-        }
     }
 
     private fun animInit(context: Context) {
@@ -270,3 +285,31 @@ class DetailViewHolder(
         backContent.text = card.content
     }
 }
+
+class ErrorCardsList(private val errorCardsList: List<Card>, private val daoTopic: TopicDao, private val daoCat: CategoryDao) :
+    RecyclerView.Adapter<ErrorCardsList.ViewHolder>() {
+
+    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val catNameScore: TextView = itemView.findViewById(R.id.tv_catNameScore)
+        val topicNameScore: TextView = itemView.findViewById(R.id.tv_topNameScore)
+        val cardTitleScore: TextView = itemView.findViewById(R.id.tv_cardTitleScore)
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.score_item, parent, false)
+        return ErrorCardsList.ViewHolder(view)
+    }
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val cardTitle = errorCardsList[position].title
+        val topic = daoTopic.getById(errorCardsList[position].topicId)
+        val cat = daoCat.getById(topic.categoryId)
+
+        holder.catNameScore.text = cat.name
+        holder.topicNameScore.text = topic.name
+        holder.cardTitleScore.text = cardTitle
+    }
+
+    override fun getItemCount() = errorCardsList.size
+    }
