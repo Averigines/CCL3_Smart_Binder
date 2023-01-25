@@ -126,7 +126,6 @@ class ActivityAddCard : AppCompatActivity() {
         spinnerTopicsAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinnerTopics.adapter = spinnerTopicsAdapter
 
-
         btnAddCategory.setOnClickListener {
             val categoryName = etCategory.text.toString()
             etCategory.text.clear()

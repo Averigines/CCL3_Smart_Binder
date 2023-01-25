@@ -83,6 +83,10 @@ interface CategoryDao {
     @Query("SELECT * FROM category WHERE name = :name")
     fun getCategoryByName(name: String): Category
 
+    @Transaction
+    @Query("SELECT * FROM category WHERE name = :name")
+    fun getCategoryWithTopicsWithCards(name: String): CategoryWithTopicsWithCards
+
     @Insert(onConflict = OnConflictStrategy.ABORT)
     fun insert(category: Category)
 

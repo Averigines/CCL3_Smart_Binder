@@ -17,6 +17,13 @@ import androidx.appcompat.widget.SearchView
 
 class MainActivity : AppCompatActivity(), OnTopicClickListener {
     lateinit var tempListCards: ArrayList<Card>
+
+    /*override fun onResume() {
+        super.onResume()
+        val newAdapter = CategoryAdapter(categoryWithTopicsWithCards, this, db)
+        recyclerView.adapter = newAdapter
+
+    }*/
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -33,6 +40,8 @@ class MainActivity : AppCompatActivity(), OnTopicClickListener {
         var allCards = db.cardDao().getAll()
         tempListCards = arrayListOf()
         tempListCards.addAll(allCards)
+
+
 
         val inflater = LayoutInflater.from(this)
         val contentView = inflater.inflate(R.layout.popup_new_category, null)
