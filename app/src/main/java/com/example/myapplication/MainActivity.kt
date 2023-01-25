@@ -33,7 +33,7 @@ class MainActivity : AppCompatActivity(), OnTopicClickListener {
             AppDatabase::class.java, "smartBinderDB"
         ).allowMainThreadQueries().build()
 
-        addData(db)
+        //addData(db)
 
         var categoriesWithTopics = db.categoryDao().getCategoriesWithTopics()
         var categoryWithTopicsWithCards = db.categoryDao().getCategoriesWithTopicsWithCards()

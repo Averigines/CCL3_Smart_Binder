@@ -35,6 +35,24 @@ data class Card(
     val topicId: Int
 ) : Serializable
 
+@Entity(foreignKeys = [ForeignKey(
+    entity = Card::class,
+    parentColumns = arrayOf("id"),
+    childColumns = arrayOf("cardId"),
+    onDelete = CASCADE),
+    ForeignKey(
+    entity = Category::class,
+    parentColumns = arrayOf("id"),
+    childColumns = arrayOf("categoryId"),
+    onDelete = CASCADE)]
+)
+data class CardResult(
+    @PrimaryKey(autoGenerate = true) var id: Int,
+    val cardId: Int,
+    val categoryId: Int,
+    var success: Boolean
+) : Serializable
+
 data class TopicWithCards(
     @Embedded val topic: Topic,
     @Relation(
@@ -155,8 +173,24 @@ interface CardDao {
     fun getCardsofTopic(id: Int): List<Card>
 }
 
-@Database(entities = [Category::class, Topic::class, Card::class], version = 5, autoMigrations = [
-        AutoMigration (from = 4, to = 5, spec = AppDatabase.MyAutoMigration::class)
+@Dao
+interface CardResultDao {
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insert(cardResult: CardResult)
+
+    @Update
+    fun update(cardResult: CardResult)
+
+    @Delete
+    fun delete(cardResult: CardResult)
+
+    @Query("SELECT * FROM cardResult")
+    fun getAll(): List<CardResult>
+
+}
+
+@Database(entities = [Category::class, Topic::class, Card::class, CardResult::class], version = 6, autoMigrations = [
+        AutoMigration (from = 5, to = 6, spec = AppDatabase.MyAutoMigration::class)
 ])
 abstract class AppDatabase : RoomDatabase() {
 
@@ -166,4 +200,5 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun categoryDao(): CategoryDao
     abstract fun topicDao(): TopicDao
     abstract fun cardDao(): CardDao
+    abstract fun CardResultDao(): CardResultDao
 }
