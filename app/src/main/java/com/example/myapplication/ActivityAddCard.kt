@@ -76,7 +76,10 @@ class ActivityAddCard : AppCompatActivity() {
         val btnAddTopic = contentViewTopic.findViewById<Button>(R.id.btnAddTopic)
         val etTopic = contentViewTopic.findViewById<EditText>(R.id.etTopic)
 
-
+        val ibClosePopup = contentView.findViewById<ImageButton>(R.id.imageButton)
+        ibClosePopup.setOnClickListener{ popup.dismiss() }
+        val ibClosePopupTopic = contentViewTopic.findViewById<ImageButton>(R.id.imageButton)
+        ibClosePopupTopic.setOnClickListener{ popupTopic.dismiss() }
 
         var allCategoriesWithTopics = db.categoryDao().getCategoriesWithTopics()
         var categoryNames = ArrayList<String>()

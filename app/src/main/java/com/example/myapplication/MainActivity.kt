@@ -37,6 +37,8 @@ class MainActivity : AppCompatActivity(), OnTopicClickListener {
         val inflater = LayoutInflater.from(this)
         val contentView = inflater.inflate(R.layout.popup_new_category, null)
         val popup = PopupWindow(contentView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, true)
+        val ibClosePopup = contentView.findViewById<ImageButton>(R.id.imageButton)
+        ibClosePopup.setOnClickListener { popup.dismiss() }
 
         val fabAddCategory = findViewById<com.google.android.material.floatingactionbutton.FloatingActionButton>(R.id.fabAddCategory)
         val btnAddCategory = contentView.findViewById<Button>(R.id.btnAddCategory)

@@ -5,10 +5,7 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
-import android.widget.PopupWindow
-import android.widget.TextView
+import android.widget.*
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
@@ -52,6 +49,8 @@ class CategoryAdapter(private val data: List<CategoryWithTopicsWithCards>, priva
         val btnAddTopic = contentView.findViewById<Button>(R.id.btnAddTopic)
         val etTopic = contentView.findViewById<EditText>(R.id.etTopic)
         val popup = PopupWindow(contentView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, true)
+        val ibClosePopup = contentView.findViewById<ImageButton>(R.id.imageButton)
+        ibClosePopup.setOnClickListener { popup.dismiss() }
 
         holder.fabAddTopic.setOnClickListener {
             popup.isOutsideTouchable = false
