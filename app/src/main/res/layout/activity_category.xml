@@ -32,7 +32,7 @@
         android:layout_marginHorizontal="24dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etSearch"
+        app:layout_constraintTop_toBottomOf="@+id/tvCategoryName"
         />
 
     <androidx.appcompat.widget.SearchView
