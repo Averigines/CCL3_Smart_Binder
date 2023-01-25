@@ -4,13 +4,11 @@ import android.content.Intent
 import android.content.res.ColorStateList
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.text.Editable
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
 import androidx.room.Room
 
@@ -31,6 +29,7 @@ class ActivityAddCard : AppCompatActivity() {
         val etTitle = findViewById<EditText>(R.id.etTitle)
         val etContent = findViewById<EditText>(R.id.etContent)
         val btnAddCard = findViewById<Button>(R.id.btnAddCard)
+        val ibDeleteCard = findViewById<ImageButton>(R.id.ibDeleteCard)
         lateinit var cardToEdit : Card
         var spinnerLayout = R.layout.spinner_item
 
@@ -50,6 +49,12 @@ class ActivityAddCard : AppCompatActivity() {
             spinnerTopics.backgroundTintList = colorStateList
 
             btnAddCard.text = "Save Changes"
+            ibDeleteCard.visibility = View.VISIBLE
+            ibDeleteCard.setOnClickListener {
+                db.cardDao().delete(cardToEdit)
+                startActivity(Intent(this, MainActivity::class.java))
+
+            }
 
             val topicOfCard = db.topicDao().getById(cardToEdit.topicId)
             val categoryOfCard = db.categoryDao().getById(topicOfCard.categoryId)
