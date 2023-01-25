@@ -10,6 +10,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.core.view.get
+import androidx.room.Room
 import androidx.viewpager2.widget.ViewPager2
 
 
@@ -23,8 +24,17 @@ class FlipCard : AppCompatActivity() {
         setContentView(R.layout.activity_flip_card)
 
         cardsViewPager = findViewById(R.id.vp_fragmentHolder)
-        val cardsList: List<Cards> = Cards.cardsList(applicationContext)
-        val tempCardList5: List<Cards> = cardsList
+        val db = Room.databaseBuilder(
+            this,
+            AppDatabase::class.java, "smartBinderDB"
+        ).allowMainThreadQueries().build()
+
+        val cardList: List<Card>  = db.cardDao().getAll() as MutableList<Card>
+        val numberOfElement: Int = 5
+        val randomElements = cardList.asSequence().shuffled().take(numberOfElement).toList()
+
+        println(randomElements)
+
         val leftCornerGradient: ImageView = findViewById(R.id.gradient_left)
         val rightCornerGradient: ImageView = findViewById(R.id.gradient_right)
         val leftCornerText: TextView = findViewById(R.id.tv_leftGradient)
@@ -33,7 +43,7 @@ class FlipCard : AppCompatActivity() {
         val cardInfo: CardView = findViewById(R.id.cv_cardInfo)
 
         val viewPagerAdapter =
-            DetailViewPagerAdapter(tempCardList5, leftCornerGradient, rightCornerGradient, leftCornerText, rightCornerText)
+            DetailViewPagerAdapter(randomElements, leftCornerGradient, rightCornerGradient, leftCornerText, rightCornerText)
         cardsViewPager.adapter = viewPagerAdapter
 
         cardsViewPager.isUserInputEnabled = false

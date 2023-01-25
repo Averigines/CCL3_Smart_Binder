@@ -62,7 +62,7 @@ class MainActivity : AppCompatActivity(), OnTopicClickListener {
         rvCards.adapter = CardAdapter(tempListCards)
 
         findViewById<Button>(R.id.btnAddCard).setOnClickListener {
-            startActivity(Intent(this, ActivityAddCard::class.java))
+            startActivity(Intent(this, CategorySelectionForFlipquizActivity::class.java))
         }
 
         fabAddCategory.setOnClickListener {
