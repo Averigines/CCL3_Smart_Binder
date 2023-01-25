@@ -30,8 +30,8 @@ data class Topic(
 )
 data class Card(
     @PrimaryKey(autoGenerate = true) var id: Int,
-    val title: String,
-    val content: String,
+    var title: String,
+    var content: String,
     val topicId: Int
 ) : Serializable
 

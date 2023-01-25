@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_marginBottom="8dp"
     android:orientation="vertical">
 
@@ -16,7 +17,20 @@
         android:background="@drawable/card_style_title"
         android:textSize="26sp"
         android:textStyle="bold"
-        tools:text = "Biology"/>
+        tools:text = "Biology"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <ImageButton
+        android:id="@+id/ibEditCard"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#00FFFFFF"
+        android:padding="0dp"
+        android:layout_marginEnd="24dp"
+        app:srcCompat="@drawable/ic_baseline_edit_24"
+        app:layout_constraintTop_toTopOf="@id/tvTitle"
+        app:layout_constraintBottom_toBottomOf="@id/tvTitle"
+        app:layout_constraintEnd_toEndOf="parent"/>
     <TextView
         android:id="@+id/tvContent"
         android:layout_width="match_parent"
@@ -28,6 +42,7 @@
         android:textColor="@color/black"
         android:background="@drawable/card_style_content"
         android:textSize="18sp"
+        app:layout_constraintTop_toBottomOf="@id/tvTitle"
         tools:text = "Biology is a very weird thing blablabla blabla baabababa"/>
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

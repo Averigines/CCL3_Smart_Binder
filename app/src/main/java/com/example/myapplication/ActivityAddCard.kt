@@ -3,6 +3,7 @@ package com.example.myapplication
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Editable
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -19,6 +20,25 @@ class ActivityAddCard : AppCompatActivity() {
             this,
             AppDatabase::class.java, "smartBinderDB"
         ).allowMainThreadQueries().build()
+
+        var fromCardEdit = false
+
+        val etTitle = findViewById<EditText>(R.id.etTitle)
+        val etContent = findViewById<EditText>(R.id.etContent)
+        val btnAddCard = findViewById<Button>(R.id.btnAddCard)
+        lateinit var cardToEdit : Card
+
+        if (intent.hasExtra("card")) {
+            fromCardEdit = true
+            cardToEdit = intent.getSerializableExtra("card") as Card
+            etTitle.setText(cardToEdit.title)
+            etContent.setText(cardToEdit.content)
+            btnAddCard.text = "Save Changes"
+            val topicOfCard = db.topicDao().getById(cardToEdit.topicId)
+            val categoryOfCard = db.categoryDao().getById(topicOfCard.categoryId)
+            intent.putExtra("topic", topicOfCard)
+            intent.putExtra("category", categoryOfCard)
+        }
 
         var fromCategories = false
 
@@ -56,6 +76,9 @@ class ActivityAddCard : AppCompatActivity() {
                     spinnerCategories.setSelection(activeCategoryIndex)
                     break
                 }
+            }
+            if (fromCardEdit) {
+                spinnerCategories.isEnabled = false
             }
         }
 
@@ -159,9 +182,12 @@ class ActivityAddCard : AppCompatActivity() {
                                 break
                             }
                         }
-                    }
+                        if (fromCardEdit) {
+                            spinnerTopics.isEnabled = false
+                        }
                     }
                 }
+            }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
                 TODO("Not yet implemented")
@@ -181,10 +207,7 @@ class ActivityAddCard : AppCompatActivity() {
             }
         }
 
-        val etTitle = findViewById<EditText>(R.id.etTitle)
-        val etContent = findViewById<EditText>(R.id.etContent)
-
-        findViewById<Button>(R.id.btnAddCard).setOnClickListener {
+        btnAddCard.setOnClickListener {
             if (etTitle.text.toString() == "" && etContent.text.toString() == "") {
             Toast.makeText(this, "Please provide a Title and Content for your card!", Toast.LENGTH_SHORT).show()
             }
@@ -196,6 +219,13 @@ class ActivityAddCard : AppCompatActivity() {
             }
             else if (relatedTopics.size == 0) {
                 Toast.makeText(this, "Please create a Topic!", Toast.LENGTH_SHORT).show()
+            }
+            else if (fromCardEdit) {
+                cardToEdit.title = etTitle.text.toString()
+                cardToEdit.content = etContent.text.toString()
+                db.cardDao().update(cardToEdit)
+                Toast.makeText(this, "Card successfully updated!", Toast.LENGTH_SHORT).show()
+                startActivity(Intent(this, MainActivity::class.java))
             }
             else {
                 db.cardDao().insert(Card(0,etTitle.text.toString(), etContent.text.toString(),relatedTopics[spinnerTopics.selectedItemPosition].id))
