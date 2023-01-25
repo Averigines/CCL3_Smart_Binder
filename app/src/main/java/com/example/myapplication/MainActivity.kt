@@ -142,10 +142,8 @@ class MainActivity : AppCompatActivity(), OnTopicClickListener {
         db.cardDao().insert(Card(0, "Money", "You earn more money if you lose.", allTopics[1].id))
         db.cardDao().insert(Card(0, "Dust2", "Dust2 is the oldest map in the pool.", allTopics[1].id))
         db.cardDao().insert(Card(0, "Nuke", "Nuke is fun,", allTopics[1].id))
-        db.cardDao().insert(Card(0, "Money", "You earn more money if you lose.", allTopics[1].id))
-        db.cardDao().insert(Card(0, "XC548", "The XC548 is a great beginner driver", allTopics[1].id))
-        db.cardDao().insert(Card(0, "Nuke", "Nuke is fun,", allTopics[1].id))
-        db.cardDao().insert(Card(0, "Money", "You earn more money if you lose.", allTopics[1].id))
+        db.cardDao().insert(Card(0, "Terrorist", "Bad", allTopics[1].id))
+        db.cardDao().insert(Card(0, "XC548", "The XC548 is a great beginner driver", allTopics[2].id))
 
     }
 }
