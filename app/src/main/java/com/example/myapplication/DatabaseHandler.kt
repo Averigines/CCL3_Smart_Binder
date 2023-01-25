@@ -148,7 +148,6 @@ interface CardDao {
     @Query("SELECT * FROM card")
     fun getAll(): List<Card>
 
-
     @Query("SELECT * FROM card JOIN topic ON card.topicId = topic.id JOIN category ON topic.categoryId = category.id WHERE category.name = :name")
     fun getAllCardsOfCategory(name: String): List<Card>
 

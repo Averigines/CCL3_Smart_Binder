@@ -13,10 +13,6 @@ interface OnTopicClickListener {
     fun onTopicClick(topic: Topic)
 }
 
-interface OnTopicAddClickListener {
-    fun onTopicAddClick(topicName: String)
-}
-
 class CategoryAdapter(private val data: List<CategoryWithTopicsWithCards>, private val topicListener: OnTopicClickListener, private val db: AppDatabase) :
     RecyclerView.Adapter<CategoryAdapter.ViewHolder>() {
 

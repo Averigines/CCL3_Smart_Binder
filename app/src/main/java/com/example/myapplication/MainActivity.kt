@@ -33,16 +33,13 @@ class MainActivity : AppCompatActivity(), OnTopicClickListener {
             AppDatabase::class.java, "smartBinderDB"
         ).allowMainThreadQueries().build()
 
-        //addData(db)
+        addData(db)
 
         var categoriesWithTopics = db.categoryDao().getCategoriesWithTopics()
         var categoryWithTopicsWithCards = db.categoryDao().getCategoriesWithTopicsWithCards()
         var allCards = db.cardDao().getAll()
         tempListCards = arrayListOf()
         tempListCards.addAll(allCards)
-        val cardsOfCategory = db.cardDao().getAllCardsOfCategory(categoryWithTopicsWithCards[0].category.name)
-
-
 
         val inflater = LayoutInflater.from(this)
         val contentView = inflater.inflate(R.layout.popup_new_category, null)
@@ -129,20 +126,26 @@ class MainActivity : AppCompatActivity(), OnTopicClickListener {
         db.cardDao().deleteAll()
 
         db.categoryDao().insert(Category(0,"Biology"))
-        //db.categoryDao().insert(Category(0,"Chemistry"))
-        //db.categoryDao().insert(Category(0,"E-Sports"))
-        //db.categoryDao().insert(Category(0,"Golf"))
+        db.categoryDao().insert(Category(0,"Chemistry"))
+        db.categoryDao().insert(Category(0,"E-Sports"))
+        db.categoryDao().insert(Category(0,"Golf"))
         val allCategories = db.categoryDao().getAll()
-        //db.topicDao().insert(Topic(0, "League", allCategories[2].id))
-        //db.topicDao().insert(Topic(0, "CSGO", allCategories[2].id))
-        //db.topicDao().insert(Topic(0, "Driver", allCategories[3].id))
-        //db.topicDao().insert(Topic(0, "Putter", allCategories[3].id))
+        db.topicDao().insert(Topic(0, "League", allCategories[2].id))
+        db.topicDao().insert(Topic(0, "CSGO", allCategories[2].id))
+        db.topicDao().insert(Topic(0, "Driver", allCategories[3].id))
+        db.topicDao().insert(Topic(0, "Putter", allCategories[3].id))
         db.topicDao().insert(Topic(0, "Mammals", allCategories[0].id))
         db.topicDao().insert(Topic(0, "Forest", allCategories[0].id))
-        //val allTopics = db.topicDao().getAll()
-        //db.cardDao().insert(Card(0, "Players", "There are 10 players in total.", allTopics[1].id))
-        //db.cardDao().insert(Card(0, "AK47", "The AK costs 2700.", allTopics[1].id))
-        //db.cardDao().insert(Card(0, "Money", "You earn more money if you lose.", allTopics[1].id))
+        val allTopics = db.topicDao().getAll()
+        db.cardDao().insert(Card(0, "Players", "There are 10 players in total.", allTopics[1].id))
+        db.cardDao().insert(Card(0, "AK47", "The AK costs 2700.", allTopics[1].id))
+        db.cardDao().insert(Card(0, "Money", "You earn more money if you lose.", allTopics[1].id))
+        db.cardDao().insert(Card(0, "Dust2", "Dust2 is the oldest map in the pool.", allTopics[1].id))
+        db.cardDao().insert(Card(0, "Nuke", "Nuke is fun,", allTopics[1].id))
+        db.cardDao().insert(Card(0, "Money", "You earn more money if you lose.", allTopics[1].id))
+        db.cardDao().insert(Card(0, "XC548", "The XC548 is a great beginner driver", allTopics[1].id))
+        db.cardDao().insert(Card(0, "Nuke", "Nuke is fun,", allTopics[1].id))
+        db.cardDao().insert(Card(0, "Money", "You earn more money if you lose.", allTopics[1].id))
 
     }
 }
