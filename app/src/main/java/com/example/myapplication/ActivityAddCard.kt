@@ -81,13 +81,16 @@ class ActivityAddCard : AppCompatActivity() {
         val ibClosePopupTopic = contentViewTopic.findViewById<ImageButton>(R.id.imageButton)
         ibClosePopupTopic.setOnClickListener{ popupTopic.dismiss() }
 
+        var newTopicOption = "New Topic"
+        var newCategoryOption = "New Category"
+
         var allCategoriesWithTopics = db.categoryDao().getCategoriesWithTopics()
         var categoryNames = ArrayList<String>()
         for(category in allCategoriesWithTopics) {
             categoryNames.add(category.category.name)
         }
 
-        var spinnerCategoryOptions = categoryNames.toTypedArray() + "New Category"
+        var spinnerCategoryOptions = categoryNames.toTypedArray() + newCategoryOption
         val spinnerCategoryAdapter = ArrayAdapter(this, spinnerLayout, spinnerCategoryOptions)
         spinnerCategoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinnerCategories.adapter = spinnerCategoryAdapter
@@ -118,7 +121,7 @@ class ActivityAddCard : AppCompatActivity() {
         for(topic in relatedTopics) {
             topicNames.add(topic.name)
         }
-        var spinnerTopicsOptions = topicNames.toTypedArray() + "New Topic"
+        var spinnerTopicsOptions = topicNames.toTypedArray() + newTopicOption
         var spinnerTopicsAdapter = ArrayAdapter(this, spinnerLayout, spinnerTopicsOptions)
         spinnerTopicsAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinnerTopics.adapter = spinnerTopicsAdapter
@@ -130,7 +133,7 @@ class ActivityAddCard : AppCompatActivity() {
             val newCategory = Category(0, categoryName)
             db.categoryDao().insert(newCategory)
             categoryNames.add(categoryName)
-            spinnerCategoryOptions = categoryNames.toTypedArray() + "New Category"
+            spinnerCategoryOptions = categoryNames.toTypedArray() + newCategoryOption
             val newAdapter = ArrayAdapter(this, spinnerLayout, spinnerCategoryOptions)
             newAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             spinnerCategories.adapter = newAdapter
@@ -152,7 +155,7 @@ class ActivityAddCard : AppCompatActivity() {
             val newTopic = Topic(0, topicName, selectedCategory.id)
             db.topicDao().insert(newTopic)
             topicNames.add(topicName)
-            spinnerTopicsOptions = topicNames.toTypedArray() + "New Topic"
+            spinnerTopicsOptions = topicNames.toTypedArray() + newTopicOption
             val newAdapter = ArrayAdapter(this, spinnerLayout, spinnerTopicsOptions)
             newAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             spinnerTopics.adapter = newAdapter
@@ -188,7 +191,7 @@ class ActivityAddCard : AppCompatActivity() {
                     for(topic in relatedTopics) {
                         topicNames.add(topic.name)
                     }
-                    spinnerTopicsOptions = topicNames.toTypedArray() + "New Topic"
+                    spinnerTopicsOptions = topicNames.toTypedArray() + newTopicOption
                     val newAdapter = ArrayAdapter(view.context, spinnerLayout, spinnerTopicsOptions)
                     newAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                     spinnerTopics.adapter = newAdapter
@@ -236,9 +239,13 @@ class ActivityAddCard : AppCompatActivity() {
             else if (etContent.text.toString() == "") {
                 Toast.makeText(this, "Please provide content for your card!", Toast.LENGTH_SHORT).show()
             }
-            else if (relatedTopics.size == 0) {
-                Toast.makeText(this, "Please create a Topic!", Toast.LENGTH_SHORT).show()
+            else if (allCategoriesWithTopics.isEmpty() || spinnerCategories.selectedItem == newCategoryOption) {
+                Toast.makeText(this, "Please choose a Topic!", Toast.LENGTH_SHORT).show()
             }
+            else if (relatedTopics.size == 0 || spinnerTopics.selectedItem == newTopicOption) {
+                Toast.makeText(this, "Please choose a Topic!", Toast.LENGTH_SHORT).show()
+            }
+
             else if (fromCardEdit) {
                 cardToEdit.title = etTitle.text.toString()
                 cardToEdit.content = etContent.text.toString()
