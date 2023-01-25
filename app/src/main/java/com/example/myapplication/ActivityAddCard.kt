@@ -1,6 +1,7 @@
 package com.example.myapplication
 
 import android.content.Intent
+import android.content.res.ColorStateList
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
@@ -9,6 +10,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.appcompat.content.res.AppCompatResources
+import androidx.core.content.ContextCompat
 import androidx.room.Room
 
 class ActivityAddCard : AppCompatActivity() {
@@ -23,19 +26,34 @@ class ActivityAddCard : AppCompatActivity() {
 
         var fromCardEdit = false
 
+        val spinnerCategories: Spinner = findViewById(R.id.spinnerCategory)
+        val spinnerTopics: Spinner = findViewById(R.id.spinnerTopic)
         val etTitle = findViewById<EditText>(R.id.etTitle)
         val etContent = findViewById<EditText>(R.id.etContent)
         val btnAddCard = findViewById<Button>(R.id.btnAddCard)
         lateinit var cardToEdit : Card
+        var spinnerLayout = R.layout.spinner_item
 
         if (intent.hasExtra("card")) {
             fromCardEdit = true
             cardToEdit = intent.getSerializableExtra("card") as Card
+
             etTitle.setText(cardToEdit.title)
             etContent.setText(cardToEdit.content)
+
+            spinnerCategories.isEnabled = false
+            spinnerTopics.isEnabled = false
+            spinnerLayout = R.layout.spinner_item_disabled
+            val color = ContextCompat.getColor(this, R.color.project_Darker_Gray)
+            val colorStateList = ColorStateList.valueOf(color)
+            spinnerCategories.backgroundTintList = colorStateList
+            spinnerTopics.backgroundTintList = colorStateList
+
             btnAddCard.text = "Save Changes"
+
             val topicOfCard = db.topicDao().getById(cardToEdit.topicId)
             val categoryOfCard = db.categoryDao().getById(topicOfCard.categoryId)
+
             intent.putExtra("topic", topicOfCard)
             intent.putExtra("category", categoryOfCard)
         }
@@ -53,8 +71,7 @@ class ActivityAddCard : AppCompatActivity() {
         val btnAddTopic = contentViewTopic.findViewById<Button>(R.id.btnAddTopic)
         val etTopic = contentViewTopic.findViewById<EditText>(R.id.etTopic)
 
-        val spinnerCategories: Spinner = findViewById(R.id.spinnerCategory)
-        val spinnerTopics: Spinner = findViewById(R.id.spinnerTopic)
+
 
         var allCategoriesWithTopics = db.categoryDao().getCategoriesWithTopics()
         var categoryNames = ArrayList<String>()
@@ -63,7 +80,7 @@ class ActivityAddCard : AppCompatActivity() {
         }
 
         var spinnerCategoryOptions = categoryNames.toTypedArray() + "New Category"
-        val spinnerCategoryAdapter = ArrayAdapter(this, R.layout.spinner_item, spinnerCategoryOptions)
+        val spinnerCategoryAdapter = ArrayAdapter(this, spinnerLayout, spinnerCategoryOptions)
         spinnerCategoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinnerCategories.adapter = spinnerCategoryAdapter
         if (intent.hasExtra("category")) {
@@ -76,9 +93,6 @@ class ActivityAddCard : AppCompatActivity() {
                     spinnerCategories.setSelection(activeCategoryIndex)
                     break
                 }
-            }
-            if (fromCardEdit) {
-                spinnerCategories.isEnabled = false
             }
         }
 
@@ -97,7 +111,7 @@ class ActivityAddCard : AppCompatActivity() {
             topicNames.add(topic.name)
         }
         var spinnerTopicsOptions = topicNames.toTypedArray() + "New Topic"
-        var spinnerTopicsAdapter = ArrayAdapter(this, R.layout.spinner_item, spinnerTopicsOptions)
+        var spinnerTopicsAdapter = ArrayAdapter(this, spinnerLayout, spinnerTopicsOptions)
         spinnerTopicsAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinnerTopics.adapter = spinnerTopicsAdapter
 
@@ -109,7 +123,7 @@ class ActivityAddCard : AppCompatActivity() {
             db.categoryDao().insert(newCategory)
             categoryNames.add(categoryName)
             spinnerCategoryOptions = categoryNames.toTypedArray() + "New Category"
-            val newAdapter = ArrayAdapter(this, R.layout.spinner_item, spinnerCategoryOptions)
+            val newAdapter = ArrayAdapter(this, spinnerLayout, spinnerCategoryOptions)
             newAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             spinnerCategories.adapter = newAdapter
             allCategoriesWithTopics = db.categoryDao().getCategoriesWithTopics()
@@ -131,7 +145,7 @@ class ActivityAddCard : AppCompatActivity() {
             db.topicDao().insert(newTopic)
             topicNames.add(topicName)
             spinnerTopicsOptions = topicNames.toTypedArray() + "New Topic"
-            val newAdapter = ArrayAdapter(this, R.layout.spinner_item, spinnerTopicsOptions)
+            val newAdapter = ArrayAdapter(this, spinnerLayout, spinnerTopicsOptions)
             newAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             spinnerTopics.adapter = newAdapter
 
@@ -167,7 +181,7 @@ class ActivityAddCard : AppCompatActivity() {
                         topicNames.add(topic.name)
                     }
                     spinnerTopicsOptions = topicNames.toTypedArray() + "New Topic"
-                    val newAdapter = ArrayAdapter(view.context, R.layout.spinner_item, spinnerTopicsOptions)
+                    val newAdapter = ArrayAdapter(view.context, spinnerLayout, spinnerTopicsOptions)
                     newAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                     spinnerTopics.adapter = newAdapter
                     if (intent.hasExtra("topic")) {
@@ -181,9 +195,6 @@ class ActivityAddCard : AppCompatActivity() {
                                 spinnerTopics.setSelection(activeTopicIndex)
                                 break
                             }
-                        }
-                        if (fromCardEdit) {
-                            spinnerTopics.isEnabled = false
                         }
                     }
                 }
