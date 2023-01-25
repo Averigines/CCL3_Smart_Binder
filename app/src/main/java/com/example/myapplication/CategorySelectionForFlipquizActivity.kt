@@ -35,16 +35,8 @@ class CategorySelectionForFlipquizActivity : AppCompatActivity() {
             val flipCardIntent = Intent(this, FlipCard::class.java)
             val selectedCategory: String = sp_Category.selectedItem.toString()
 
-            var cardsList: List<Card> = mutableListOf()
-
-            if(selectedCategory.toString() == "All categories") {
-                cardsList = db.cardDao().getAll() as MutableList<Card>
-            } else {
-
-            }
-
-
             flipCardIntent.putExtra("selectedCategory", selectedCategory)
+            startActivity(flipCardIntent)
         }
     }
 }

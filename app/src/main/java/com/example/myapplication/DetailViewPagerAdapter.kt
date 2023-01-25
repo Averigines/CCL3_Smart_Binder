@@ -1,6 +1,5 @@
 package com.example.myapplication
 
-import Cards
 import android.animation.Animator
 import android.animation.AnimatorInflater
 import android.animation.AnimatorSet
@@ -12,10 +11,12 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
+import androidx.room.Room
 import java.lang.Float.max
 import java.lang.Float.min
 
@@ -25,7 +26,11 @@ class DetailViewPagerAdapter(
     private val rightCornerGradient: ImageView,
     private val leftCornerText: TextView,
     private val rightCornerText: TextView,
-) : RecyclerView.Adapter<DetailViewPagerAdapter.DetailViewHolder>() {
+    private val dao: TopicDao,
+    private val daoCategory: CategoryDao,
+    private val tvCategory: TextView,
+    private val infoBtn: TextView
+) : RecyclerView.Adapter<DetailViewHolder>() {
 
     //declaration for card animation
     private lateinit var frontAnim: AnimatorSet
@@ -33,30 +38,9 @@ class DetailViewPagerAdapter(
     private var animationRunning: Boolean = false
     private var cursorInitialPosition: Float = 0f
     private var cursorLastPosition: Float = 0f
+    var swipeLeft: Boolean = false
+    val listCardsError: MutableList<Card> = mutableListOf()
     private var tempList: List<Card> = cardsList
-
-    class DetailViewHolder(
-        itemView: View
-    ) : RecyclerView.ViewHolder(itemView) {
-
-        val cardFront: CardView = itemView.findViewById(R.id.cv_cardFront)
-        val cardBack: CardView = itemView.findViewById(R.id.cv_cardBack)
-        private val frontTitle: TextView = itemView.findViewById(R.id.tv_cardFrontTitle)
-        private val frontContent: TextView = itemView.findViewById(R.id.tv_cardFrontContent)
-        private val backContent: TextView = itemView.findViewById(R.id.tv_cardBack)
-
-        fun isBackFacing(): Boolean {
-            return cardBack.alpha == 1.0f
-        }
-
-        fun bind(
-            card: Card
-        ) {
-
-            frontContent.text = card.title
-            backContent.text = card.content
-        }
-    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DetailViewHolder {
 
@@ -70,11 +54,12 @@ class DetailViewPagerAdapter(
     @SuppressLint("ClickableViewAccessibility")
     override fun onBindViewHolder(holder: DetailViewHolder, position: Int) {
         val cardArgs: Card = tempList[position]
-        holder.bind(cardArgs)
+        holder.bind(cardArgs, dao, daoCategory, tvCategory)
 
         // Init of the animations
         animInit(holder.itemView.context)
 
+        var points = tempList.size
         val scale = holder.itemView.context.resources.displayMetrics.density
         val distanceCamera = 8000 * scale
         holder.cardFront.cameraDistance = distanceCamera
@@ -88,23 +73,32 @@ class DetailViewPagerAdapter(
                 val cardStart = (displayMetrics.widthPixels.toFloat() / 2) - (cardWidth / 2)
                 val minSwipeDistance = 360
 
+
                 when (motionEvent.action) {
+
                     MotionEvent.ACTION_DOWN -> {
                         cursorInitialPosition = motionEvent.rawX
                     }
                     MotionEvent.ACTION_UP -> {
-                        leftCornerText.alpha = 0f
-                        leftCornerGradient.alpha = 0f
-                        rightCornerText.alpha = 0f
-                        rightCornerGradient.alpha = 0f
+                        Handler(Looper.getMainLooper()).postDelayed({
+                            cornerAlphaTo0()
+                        }, 320)
                         cursorLastPosition = motionEvent.rawX
                         val distY = kotlin.math.abs(cursorLastPosition - cursorInitialPosition)
                         if (holder.isBackFacing()) {
                             if (distY > minSwipeDistance) {
+                                if (swipeLeft) {
+                                    points -= 1
+                                    listCardsError.add(tempList[position])
+                                }
                                 fadeScaleOut(holder.cardBack, 350)
                                 Handler(Looper.getMainLooper()).postDelayed({
                                     tempList = tempList.drop(1)
                                     notifyItemRemoved(0)
+                                    if (tempList.isEmpty()) {
+                                        // do something  (display results)
+                                        tvCategory.visibility = View.GONE
+                                    }
                                 }, 320)
                             } else {
                                 holder.cardBack.animate()
@@ -141,8 +135,8 @@ class DetailViewPagerAdapter(
                             return@setOnTouchListener true
 
                         if (newX < cursorInitialPosition) { //swipe left
-                            rightCornerText.alpha = 0f
-                            rightCornerGradient.alpha = 0f
+                            swipeLeft = true
+                            cornerAlphaTo0()
                             cornerAlphaOnMove(leftCornerGradient, leftCornerText, scaleAlpha)
                             holder.cardBack.animate()
                                 .x(
@@ -154,8 +148,8 @@ class DetailViewPagerAdapter(
                                 .setDuration(0)
                                 .start()
                         } else if (newX > cursorInitialPosition) { // swipe right
-                            leftCornerText.alpha = 0f
-                            leftCornerGradient.alpha = 0f
+                            swipeLeft = false
+                            cornerAlphaTo0()
                             cornerAlphaOnMove(rightCornerGradient, rightCornerText, scaleAlpha)
                             holder.cardBack.animate()
                                 .x(
@@ -177,7 +171,7 @@ class DetailViewPagerAdapter(
 
     private fun cornerAlphaOnMove(iv: ImageView, tv: TextView, scale: Float) {
         iv.animate()
-            .alpha(min(scale* 0.002f, 1f))
+            .alpha(min(scale * 0.002f, 1f))
             .setDuration(0)
             .start()
         tv.animate()
@@ -219,6 +213,27 @@ class DetailViewPagerAdapter(
 
     }
 
+    private fun displayResultAndHideAllViews() {
+        infoBtn.visibility = View.GONE
+    }
+
+    private fun cornerAlphaTo0() {
+        leftCornerText.alpha = 0f
+        leftCornerGradient.alpha = 0f
+        rightCornerText.alpha = 0f
+        rightCornerGradient.alpha = 0f
+    }
+
+    private fun cornerAlphaTo1(side: String) {
+        if (side == "right") {
+            rightCornerText.alpha = 1f
+            rightCornerGradient.alpha = 1f
+        } else {
+            leftCornerText.alpha = 1f
+            leftCornerGradient.alpha = 1f
+        }
+    }
+
     private fun animInit(context: Context) {
         frontAnim = AnimatorInflater.loadAnimator(
             context,
@@ -228,5 +243,30 @@ class DetailViewPagerAdapter(
             context,
             R.animator.back_animator
         ) as AnimatorSet
+    }
+}
+
+class DetailViewHolder(
+    itemView: View,
+) : RecyclerView.ViewHolder(itemView) {
+
+    val cardFront: CardView = itemView.findViewById(R.id.cv_cardFront)
+    val cardBack: CardView = itemView.findViewById(R.id.cv_cardBack)
+    private val frontTitle: TextView = itemView.findViewById(R.id.tv_cardFrontTitle)
+    private val frontContent: TextView = itemView.findViewById(R.id.tv_cardFrontContent)
+    private val backContent: TextView = itemView.findViewById(R.id.tv_cardBack)
+
+    fun isBackFacing(): Boolean {
+        return cardBack.alpha == 1.0f
+    }
+
+    fun bind(card: Card, dao: TopicDao, daoCategory: CategoryDao, tv_category: TextView) {
+        val topic = dao.getById(card.topicId)
+        val category = daoCategory.getById(topic.categoryId)
+
+        tv_category.text = category.name
+        frontTitle.text = topic.name
+        frontContent.text = card.title
+        backContent.text = card.content
     }
 }
