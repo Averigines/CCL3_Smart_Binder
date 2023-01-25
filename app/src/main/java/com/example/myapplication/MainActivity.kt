@@ -40,6 +40,7 @@ class MainActivity : AppCompatActivity(), OnTopicClickListener {
         var allCards = db.cardDao().getAll()
         tempListCards = arrayListOf()
         tempListCards.addAll(allCards)
+        val cardsOfCategory = db.cardDao().getAllCardsOfCategory(categoryWithTopicsWithCards[0].category.name)
 
 
 
