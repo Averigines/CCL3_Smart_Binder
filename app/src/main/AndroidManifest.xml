@@ -12,10 +12,23 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApplication"
         tools:targetApi="31">
-
-        <activity android:name=".MainActivity"
+        <activity
+            android:name=".CategorySelectionForFlipquizActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".flipCategorySelectionActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".MainActivity"
             android:exported="true">
-
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -46,9 +59,6 @@
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
-
-
-
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />

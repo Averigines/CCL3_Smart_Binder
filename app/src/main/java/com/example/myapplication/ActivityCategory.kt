@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.widget.Adapter
 import android.widget.TextView
 import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.RecyclerView
@@ -88,6 +89,7 @@ class ActivityCategory : AppCompatActivity() {
 
         })
     }
+
 
     private fun setupViewPager(viewPager: ViewPager2, topicWithCards: List<TopicWithCards>, activeTopicId: Int) {
 

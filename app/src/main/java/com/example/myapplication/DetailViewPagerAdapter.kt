@@ -20,7 +20,7 @@ import java.lang.Float.max
 import java.lang.Float.min
 
 class DetailViewPagerAdapter(
-    cardsList: List<Cards>,
+    cardsList: List<Card>,
     private val leftCornerGradient: ImageView,
     private val rightCornerGradient: ImageView,
     private val leftCornerText: TextView,
@@ -33,7 +33,7 @@ class DetailViewPagerAdapter(
     private var animationRunning: Boolean = false
     private var cursorInitialPosition: Float = 0f
     private var cursorLastPosition: Float = 0f
-    private var tempList: List<Cards> = cardsList
+    private var tempList: List<Card> = cardsList
 
     class DetailViewHolder(
         itemView: View
@@ -50,9 +50,9 @@ class DetailViewPagerAdapter(
         }
 
         fun bind(
-            card: Cards
+            card: Card
         ) {
-            frontTitle.text = card.topic
+
             frontContent.text = card.title
             backContent.text = card.content
         }
@@ -69,7 +69,7 @@ class DetailViewPagerAdapter(
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onBindViewHolder(holder: DetailViewHolder, position: Int) {
-        val cardArgs: Cards = tempList[position]
+        val cardArgs: Card = tempList[position]
         holder.bind(cardArgs)
 
         // Init of the animations
