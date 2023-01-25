@@ -92,7 +92,7 @@ class ActivityAddCard : AppCompatActivity() {
 
         var spinnerCategoryOptions = categoryNames.toTypedArray() + newCategoryOption
         val spinnerCategoryAdapter = ArrayAdapter(this, spinnerLayout, spinnerCategoryOptions)
-        spinnerCategoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        spinnerCategoryAdapter.setDropDownViewResource(R.layout.spiner_style_item)
         spinnerCategories.adapter = spinnerCategoryAdapter
         if (intent.hasExtra("category")) {
             val activeCategory = intent.getSerializableExtra("category") as Category
@@ -123,7 +123,7 @@ class ActivityAddCard : AppCompatActivity() {
         }
         var spinnerTopicsOptions = topicNames.toTypedArray() + newTopicOption
         var spinnerTopicsAdapter = ArrayAdapter(this, spinnerLayout, spinnerTopicsOptions)
-        spinnerTopicsAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        spinnerTopicsAdapter.setDropDownViewResource(R.layout.spiner_style_item)
         spinnerTopics.adapter = spinnerTopicsAdapter
 
         btnAddCategory.setOnClickListener {
@@ -134,7 +134,7 @@ class ActivityAddCard : AppCompatActivity() {
             categoryNames.add(categoryName)
             spinnerCategoryOptions = categoryNames.toTypedArray() + newCategoryOption
             val newAdapter = ArrayAdapter(this, spinnerLayout, spinnerCategoryOptions)
-            newAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            newAdapter.setDropDownViewResource(R.layout.spiner_style_item)
             spinnerCategories.adapter = newAdapter
             allCategoriesWithTopics = db.categoryDao().getCategoriesWithTopics()
             val activeCategoryIndex: Int
@@ -156,7 +156,7 @@ class ActivityAddCard : AppCompatActivity() {
             topicNames.add(topicName)
             spinnerTopicsOptions = topicNames.toTypedArray() + newTopicOption
             val newAdapter = ArrayAdapter(this, spinnerLayout, spinnerTopicsOptions)
-            newAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            newAdapter.setDropDownViewResource(R.layout.spiner_style_item)
             spinnerTopics.adapter = newAdapter
 
             allCategoriesWithTopics = db.categoryDao().getCategoriesWithTopics()
@@ -192,7 +192,7 @@ class ActivityAddCard : AppCompatActivity() {
                     }
                     spinnerTopicsOptions = topicNames.toTypedArray() + newTopicOption
                     val newAdapter = ArrayAdapter(view.context, spinnerLayout, spinnerTopicsOptions)
-                    newAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                    newAdapter.setDropDownViewResource(R.layout.spiner_style_item)
                     spinnerTopics.adapter = newAdapter
                     if (intent.hasExtra("topic")) {
                         fromCategories = true
