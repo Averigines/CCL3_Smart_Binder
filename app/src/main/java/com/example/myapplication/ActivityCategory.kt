@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.Adapter
+import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.RecyclerView
@@ -21,6 +22,11 @@ class ActivityCategory : AppCompatActivity() {
         val db = Room.databaseBuilder(this, AppDatabase::class.java, "smartBinderDB").allowMainThreadQueries().build()
 
         setUpBottomNav(this, "llHome")
+
+        val ibBack = findViewById<ImageButton>(R.id.ibBack)
+        ibBack.setOnClickListener {
+            finish()
+        }
 
         val viewPager = findViewById<ViewPager2>(R.id.viewPager)
         var activeTopic = intent.getSerializableExtra("topic") as Topic

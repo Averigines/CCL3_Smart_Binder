@@ -3,10 +3,7 @@ package com.example.myapplication
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.ArrayAdapter
-import android.widget.Button
-import android.widget.Spinner
-import android.widget.TextView
+import android.widget.*
 import androidx.room.Room
 
 class CategorySelectionForFlipquizActivity : AppCompatActivity() {
@@ -20,6 +17,11 @@ class CategorySelectionForFlipquizActivity : AppCompatActivity() {
         ).allowMainThreadQueries().build()
 
         setUpBottomNav(this, "llQuiz")
+
+        val ibBack = findViewById<ImageButton>(R.id.ibBack)
+        ibBack.setOnClickListener {
+            finish()
+        }
 
         val btnSwitch : Button = findViewById(R.id.btn_gotToFlip)
         val categoryList: List<Category> = db.categoryDao().getAll()

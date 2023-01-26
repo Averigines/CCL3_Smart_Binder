@@ -24,7 +24,13 @@ class ActivityAddCard : AppCompatActivity() {
 
         setUpBottomNav(this, "llAddCard")
 
+        val ibBack = findViewById<ImageButton>(R.id.ibBack)
+        ibBack.setOnClickListener {
+            finish()
+        }
+
         var fromCardEdit = false
+
 
         val spinnerCategories: Spinner = findViewById(R.id.spinnerCategory)
         val spinnerTopics: Spinner = findViewById(R.id.spinnerTopic)

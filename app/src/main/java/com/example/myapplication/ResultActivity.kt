@@ -7,7 +7,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewOutlineProvider
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
@@ -33,6 +33,11 @@ class ResultActivity : AppCompatActivity() {
         ).allowMainThreadQueries().build()
 
         setUpBottomNav(this, "llStats")
+
+        val ibBack = findViewById<ImageButton>(R.id.ibBack)
+        ibBack.setOnClickListener {
+            finish()
+        }
 
         //get from db
         val categoriesList: List<Category> = db.categoryDao().getAll()
