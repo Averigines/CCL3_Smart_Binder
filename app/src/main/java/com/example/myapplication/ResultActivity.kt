@@ -68,10 +68,12 @@ class ResultActivity : AppCompatActivity() {
             val builder = AlertDialog.Builder(this)
             builder.setMessage("Are you sure you want to erase all the statistics?")
                 .setTitle("Erasing confirmation")
-            builder.setPositiveButton("OK") { dialog, id ->
+            builder.setPositiveButton("OK") { dialog, _ ->
+                db.CardResultDao().deleteAll()
+                dialog.dismiss()
             }
-            builder.setNegativeButton("Cancel") { dialog, id ->
-                // Do something when the "Cancel" button is clicked
+            builder.setNegativeButton("Cancel") { dialog, _ ->
+                dialog.dismiss()
             }
             val dialog = builder.create()
             dialog.show()

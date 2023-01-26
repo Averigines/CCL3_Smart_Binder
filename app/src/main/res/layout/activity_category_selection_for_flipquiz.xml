@@ -55,8 +55,6 @@
         android:visibility="visible"
         app:cardCornerRadius="10dp"
         app:cardElevation="4dp"
-        app:cardUseCompatPadding="true"
-        app:cardPreventCornerOverlap="false"
         app:strokeWidth="2dp"
         app:strokeColor="@color/project_Blizzard_Blue"
         app:layout_constraintBottom_toTopOf="@+id/btn_gotToFlip"
