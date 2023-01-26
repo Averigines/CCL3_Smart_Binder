@@ -1,7 +1,6 @@
 package com.example.myapplication
 
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.widget.ImageButton
 import android.widget.LinearLayout
@@ -26,16 +25,35 @@ fun setUpBottomNav(context: Activity, activeItem: String)  {
     if(activeItem == "llQuiz") llQuiz.setBackgroundColor(activeColor)
     if(activeItem == "llStats") llStats.setBackgroundColor(activeColor)
 
+    llHome.setOnClickListener {
+        val intent = Intent(context, MainActivity::class.java)
+        startActivity(context, intent, null)
+    }
     ibHome.setOnClickListener {
         val intent = Intent(context, MainActivity::class.java)
+        startActivity(context, intent, null)
+    }
+
+    llAddCard.setOnClickListener {
+        val intent = Intent(context, ActivityAddCard::class.java)
         startActivity(context, intent, null)
     }
     ibAddCard.setOnClickListener {
         val intent = Intent(context, ActivityAddCard::class.java)
         startActivity(context, intent, null)
     }
+
+    llQuiz.setOnClickListener {
+        val intent = Intent(context, CategorySelectionForFlipquizActivity::class.java)
+        startActivity(context, intent, null)
+    }
     ibQuiz.setOnClickListener {
         val intent = Intent(context, CategorySelectionForFlipquizActivity::class.java)
+        startActivity(context, intent, null)
+    }
+
+    llStats.setOnClickListener {
+        val intent = Intent(context, ResultActivity::class.java)
         startActivity(context, intent, null)
     }
     ibStats.setOnClickListener {
