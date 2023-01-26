@@ -65,11 +65,13 @@ class ActivityAddCard : AppCompatActivity() {
 
             ibDeleteCard.setOnClickListener {
                 val builder = AlertDialog.Builder(this)
-                builder.setMessage("Are you sure you want to erase all the statistics?")
+                builder.setMessage("Are you sure you want to erase the card")
                     .setTitle("Erasing confirmation")
                 builder.setPositiveButton("OK") { dialog, _ ->
                     db.cardDao().delete(cardToEdit)
                     dialog.dismiss()
+                    val intent = Intent(this, MainActivity::class.java)
+                    startActivity(intent)
                 }
                 builder.setNegativeButton("Cancel") { dialog, _ ->
                     dialog.dismiss()
