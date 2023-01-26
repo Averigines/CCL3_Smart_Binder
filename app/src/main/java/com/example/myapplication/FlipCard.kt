@@ -59,7 +59,6 @@ class FlipCard : AppCompatActivity() {
         val rightCornerGradient: ImageView = findViewById(R.id.gradient_right)
         val leftCornerText: TextView = findViewById(R.id.tv_leftGradient)
         val rightCornerText: TextView = findViewById(R.id.tv_rightGradient)
-        val cardInfo: CardView = findViewById(R.id.cv_cardInfo)
         val dao = db.topicDao()
         val daoCategory = db.categoryDao()
         val tvCategory: TextView = findViewById(R.id.tv_catNameOnFlip)

@@ -11,6 +11,7 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.ViewCompat
@@ -60,6 +61,21 @@ class ResultActivity : AppCompatActivity() {
 
         rvDetailedScore.layoutManager = LinearLayoutManager(this)
         rvDetailedScore.adapter = DetailedResultAdapter(cardsTurnedList, categoriesList, db)
+
+        val btnEraseDb : ImageView = findViewById(R.id.iv_btnDelete)
+
+        btnEraseDb.setOnClickListener {
+            val builder = AlertDialog.Builder(this)
+            builder.setMessage("Are you sure you want to erase all the statistics?")
+                .setTitle("Erasing confirmation")
+            builder.setPositiveButton("OK") { dialog, id ->
+            }
+            builder.setNegativeButton("Cancel") { dialog, id ->
+                // Do something when the "Cancel" button is clicked
+            }
+            val dialog = builder.create()
+            dialog.show()
+        }
 
 
     }

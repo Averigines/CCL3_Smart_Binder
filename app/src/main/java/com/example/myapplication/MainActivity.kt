@@ -38,39 +38,7 @@ class MainActivity : AppCompatActivity(), OnTopicClickListener {
         //addData(db)
 
         setUpBottomNav(this, "llHome")
-        /*val ibHome = findViewById<ImageButton>(R.id.ibHome)
-        val ibAddCard = findViewById<ImageButton>(R.id.ibAddCard)
-        val ibQuiz = findViewById<ImageButton>(R.id.ibQuiz)
-        val ibStats = findViewById<ImageButton>(R.id.ibStats)
-        val llHome = findViewById<LinearLayout>(R.id.llHome)
-        val llAddCard = findViewById<LinearLayout>(R.id.llAddCard)
-        val llQuiz = findViewById<LinearLayout>(R.id.llQuiz)
-        val llStats = findViewById<LinearLayout>(R.id.llStats)
 
-        val activeColor = ContextCompat.getColor(this, R.color.project_active_bottom)
-
-        ibHome.setOnClickListener {
-            val intent = Intent(this, MainActivity::class.java)
-            llHome.setBackgroundColor(activeColor)
-            startActivity(intent)
-        }
-        ibAddCard.setOnClickListener {
-            val intent = Intent(this, ActivityAddCard::class.java)
-            llAddCard.setBackgroundColor(activeColor)
-            startActivity(intent)
-        }
-        ibQuiz.setOnClickListener {
-            val intent = Intent(this, CategorySelectionForFlipquizActivity::class.java)
-            llQuiz.setBackgroundColor(activeColor)
-            startActivity(intent)
-        }
-        ibStats.setOnClickListener {
-            val intent = Intent(this, ResultActivity::class.java)
-            llStats.setBackgroundColor(activeColor)
-            startActivity(intent)
-        }*/
-
-        var categoriesWithTopics = db.categoryDao().getCategoriesWithTopics()
         var categoryWithTopicsWithCards = db.categoryDao().getCategoriesWithTopicsWithCards()
         var allCards = db.cardDao().getAll()
         tempListCards = arrayListOf()
