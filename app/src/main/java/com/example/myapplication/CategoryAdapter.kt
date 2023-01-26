@@ -64,11 +64,13 @@ class CategoryAdapter(private val data: List<CategoryWithTopicsWithCards>, priva
         }
         holder.categoryName.setOnClickListener {
             if(holder.topicList.visibility == View.GONE) {
+                holder.categoryName.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_arrow_up, 0, 0, 0);
                 setUpTopicList(holder, data[position].topics)
                 holder.topicList.visibility = View.VISIBLE
                 holder.fabAddTopic.visibility = View.VISIBLE
             }
             else {
+                holder.categoryName.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_arrow_down, 0, 0, 0);
                 holder.topicList.visibility = View.GONE
                 holder.fabAddTopic.visibility = View.GONE
             }
