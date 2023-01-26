@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.MotionEvent
 import android.view.View
 import android.widget.Button
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -34,6 +35,11 @@ class FlipCard : AppCompatActivity() {
         ).allowMainThreadQueries().build()
 
         setUpBottomNav(this, "llQuiz")
+
+        val ibBack = findViewById<ImageButton>(R.id.ibBack)
+        ibBack.setOnClickListener {
+            finish()
+        }
 
         val selectedCategory: String = intent.getStringExtra("selectedCategory") as String
 
