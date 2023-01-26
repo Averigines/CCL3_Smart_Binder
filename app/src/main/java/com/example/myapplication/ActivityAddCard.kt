@@ -63,10 +63,6 @@ class ActivityAddCard : AppCompatActivity() {
             llBtn.visibility = View.VISIBLE
             btnAddCard.visibility = View.GONE
 
-            ibSaveCard.setOnClickListener {
-
-            }
-
             ibDeleteCard.setOnClickListener {
                 val builder = AlertDialog.Builder(this)
                 builder.setMessage("Are you sure you want to erase all the statistics?")
