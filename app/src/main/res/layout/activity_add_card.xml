@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
-    android:paddingHorizontal="16dp"
     tools:context=".ActivityAddCard">
 
     <Spinner
@@ -16,6 +15,7 @@
         android:backgroundTint="@color/primary"
         android:overlapAnchor="false"
         android:layout_marginTop="8dp"
+        android:layout_marginHorizontal="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvCategory" />
@@ -28,6 +28,7 @@
         android:overlapAnchor="false"
         android:backgroundTint="@color/primary"
         android:layout_marginTop="8dp"
+        android:layout_marginHorizontal="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvTopic" />
@@ -35,13 +36,14 @@
     <EditText
         android:id="@+id/etContent"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="260dp"
         android:ems="10"
         android:gravity="start|top"
         android:inputType="textMultiLine"
         android:hint="Card content"
         android:padding="16dp"
         android:layout_marginTop="16dp"
+        android:layout_marginHorizontal="16dp"
         android:textColor="@color/primary"
         android:textColorHint="@color/primary"
         android:background="@drawable/search_view"
@@ -58,6 +60,7 @@
         android:textColor="@color/primary"
         android:textStyle="italic"
         android:layout_marginTop="32dp"
+        android:layout_marginHorizontal="16dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -70,6 +73,7 @@
         android:textColor="@color/primary"
         android:textStyle="italic"
         android:layout_marginTop="16dp"
+        android:layout_marginHorizontal="16dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/spinnerCategory" />
 
@@ -77,14 +81,104 @@
         android:id="@+id/btnAddCard"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+
+        android:backgroundTint="@color/primary"
         android:text="Add card"
         android:textColor="@color/black"
-        android:backgroundTint="@color/primary"
-        android:layout_marginBottom="16dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/cardView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        />
+        app:layout_constraintTop_toBottomOf="@+id/etContent" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:background="@drawable/bottom_nav"
+        android:backgroundTint="@color/project_Light_Grey"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center">
+
+            <LinearLayout
+                android:id="@+id/llHome"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:paddingVertical="8dp">
+
+                <ImageButton
+                    android:id="@+id/ibHome"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:adjustViewBounds="true"
+                    android:background="@android:color/transparent"
+                    android:scaleType="fitCenter"
+                    app:srcCompat="@drawable/nav_home" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/llAddCard"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:paddingVertical="8dp">
+
+                <ImageButton
+                    android:id="@+id/ibAddCard"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:adjustViewBounds="true"
+                    android:background="@android:color/transparent"
+                    android:scaleType="fitCenter"
+                    app:srcCompat="@drawable/nav_new_card" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/llQuiz"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:paddingVertical="8dp">
+
+                <ImageButton
+                    android:id="@+id/ibQuiz"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:adjustViewBounds="true"
+                    android:background="@android:color/transparent"
+                    android:scaleType="fitCenter"
+                    app:srcCompat="@drawable/nav_quiz" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/llStats"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:paddingVertical="8dp">
+
+                <ImageButton
+                    android:id="@+id/ibStats"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:adjustViewBounds="true"
+                    android:background="@android:color/transparent"
+                    android:scaleType="fitCenter"
+                    app:srcCompat="@drawable/nav_stats" />
+            </LinearLayout>
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
 
     <EditText
         android:id="@+id/etTitle"
@@ -98,6 +192,7 @@
         android:textColorHint="@color/primary"
         android:background="@drawable/search_view"
         android:layout_marginTop="16dp"
+        android:layout_marginHorizontal="16dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvTitle" />
 
@@ -110,6 +205,7 @@
         android:textStyle="bold"
         android:textColor="@color/tertiary"
         android:layout_marginTop="16dp"
+        android:layout_marginHorizontal="16dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/spinnerTopic" />
 

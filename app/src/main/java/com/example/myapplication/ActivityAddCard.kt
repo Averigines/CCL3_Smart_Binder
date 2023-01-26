@@ -22,6 +22,8 @@ class ActivityAddCard : AppCompatActivity() {
             AppDatabase::class.java, "smartBinderDB"
         ).allowMainThreadQueries().build()
 
+        setUpBottomNav(this, "llAddCard")
+
         var fromCardEdit = false
 
         val spinnerCategories: Spinner = findViewById(R.id.spinnerCategory)

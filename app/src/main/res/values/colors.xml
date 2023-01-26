@@ -22,4 +22,5 @@
     <color name ="project_Champagne_Pink">#E9D2C0</color>
     <color name ="project_Teal_Blue">#2D728F</color>
     <color name ="project_Darker_Gray">#AAAAAA</color>
+    <color name="project_active_bottom">#6B8593</color>
 </resources>

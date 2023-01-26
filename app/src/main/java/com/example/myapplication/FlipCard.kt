@@ -33,6 +33,8 @@ class FlipCard : AppCompatActivity() {
             AppDatabase::class.java, "smartBinderDB"
         ).allowMainThreadQueries().build()
 
+        setUpBottomNav(this, "llQuiz")
+
         val selectedCategory: String = intent.getStringExtra("selectedCategory") as String
 
         var cardsList: List<Card> = listOf()

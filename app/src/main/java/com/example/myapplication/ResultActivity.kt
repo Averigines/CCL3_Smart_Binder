@@ -27,6 +27,8 @@ class ResultActivity : AppCompatActivity() {
             AppDatabase::class.java, "smartBinderDB"
         ).allowMainThreadQueries().build()
 
+        setUpBottomNav(this, "llStats")
+
         //get from db
         val categoriesList: List<Category> = db.categoryDao().getAll()
         val cardsTurnedList: List<CardResult> = db.CardResultDao().getAll()

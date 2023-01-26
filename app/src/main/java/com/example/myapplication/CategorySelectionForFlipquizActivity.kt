@@ -19,6 +19,8 @@ class CategorySelectionForFlipquizActivity : AppCompatActivity() {
             AppDatabase::class.java, "smartBinderDB"
         ).allowMainThreadQueries().build()
 
+        setUpBottomNav(this, "llQuiz")
+
         val btnSwitch : Button = findViewById(R.id.btn_gotToFlip)
         val categoryList: List<Category> = db.categoryDao().getAll()
         val categoryArray: ArrayList<String> = arrayListOf("All categories")
