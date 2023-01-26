@@ -241,7 +241,6 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.cardview.widget.CardView>
-
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"
         android:layout_width="match_parent"
@@ -263,7 +262,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:paddingVertical="8dp">
+                android:paddingVertical="12dp">
 
                 <ImageButton
                     android:id="@+id/ibHome"
@@ -281,7 +280,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:paddingVertical="8dp">
+                android:paddingVertical="12dp">
 
                 <ImageButton
                     android:id="@+id/ibAddCard"
@@ -291,6 +290,7 @@
                     android:background="@android:color/transparent"
                     android:scaleType="fitCenter"
                     app:srcCompat="@drawable/nav_new_card" />
+
             </LinearLayout>
 
             <LinearLayout
@@ -299,7 +299,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:paddingVertical="8dp">
+                android:paddingVertical="12dp">
 
                 <ImageButton
                     android:id="@+id/ibQuiz"
@@ -317,7 +317,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:paddingVertical="8dp">
+                android:paddingVertical="12dp">
 
                 <ImageButton
                     android:id="@+id/ibStats"
