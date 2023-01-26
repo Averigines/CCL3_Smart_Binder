@@ -2,4 +2,6 @@
 <resources>
     <dimen name="viewpager_next_item_visible">12dp</dimen>
     <dimen name="viewpager_current_item_horizontal_margin">28dp</dimen>
+    <dimen name="cardview_default_elevation">4dp</dimen>
+    <dimen name="cardview_default_radius">4dp</dimen>
 </resources>

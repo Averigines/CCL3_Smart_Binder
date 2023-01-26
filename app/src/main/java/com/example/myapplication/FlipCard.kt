@@ -53,7 +53,6 @@ class FlipCard : AppCompatActivity() {
         val rightCornerGradient: ImageView = findViewById(R.id.gradient_right)
         val leftCornerText: TextView = findViewById(R.id.tv_leftGradient)
         val rightCornerText: TextView = findViewById(R.id.tv_rightGradient)
-        val infoBtn: TextView = findViewById(R.id.tv_contentCheck)
         val cardInfo: CardView = findViewById(R.id.cv_cardInfo)
         val dao = db.topicDao()
         val daoCategory = db.categoryDao()
@@ -62,6 +61,7 @@ class FlipCard : AppCompatActivity() {
         val cvScore: CardView = findViewById(R.id.cv)
         val btnSwitch: Button = findViewById(R.id.btnButton)
         val rvScore: RecyclerView = findViewById(R.id.rv_score)
+        val btnReload: ImageView = findViewById(R.id.iv_refreshBtn)
         val viewPagerAdapter =
             DetailViewPagerAdapter(
                 randomListOf5,
@@ -73,7 +73,6 @@ class FlipCard : AppCompatActivity() {
                 dao,
                 daoCategory,
                 tvCategory,
-                infoBtn,
                 tvDisplayScore,
                 cvScore,
                 rvScore
@@ -82,29 +81,16 @@ class FlipCard : AppCompatActivity() {
 
         cardsViewPager.isUserInputEnabled = false
 
-        infoBtn.apply {
-            setOnTouchListener { _, motionEvent ->
-                when (motionEvent.action) {
-                    MotionEvent.ACTION_DOWN -> {
-                        cardsViewPager.visibility = View.GONE
-                        cardInfo.visibility = View.VISIBLE
-                        return@setOnTouchListener true
-                    }
-                    MotionEvent.ACTION_UP -> {
-                        cardsViewPager.visibility = View.VISIBLE
-                        cardInfo.visibility = View.GONE
-                        return@setOnTouchListener true
-                    }
-                    else -> {
-                        return@setOnTouchListener false
-                    }
-                }
-            }
-        }
-
         btnSwitch.setOnClickListener{
             if(cvScore.visibility == View.VISIBLE) {
                 startActivity(Intent(this, ResultActivity::class.java))
+            }
+        }
+        btnReload.setOnClickListener{
+            if(cvScore.visibility == View.VISIBLE) {
+                val intentReload = Intent(this, FlipCard::class.java)
+                intentReload.putExtra("selectedCategory", selectedCategory)
+                startActivity(intentReload)
             }
         }
 

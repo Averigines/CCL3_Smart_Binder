@@ -31,7 +31,6 @@ class DetailViewPagerAdapter(
     private val dao: TopicDao,
     private val daoCategory: CategoryDao,
     private val tvCategory: TextView,
-    private val infoBtn: TextView,
     private val tvScoreInt: TextView,
     private val cvScore: CardView,
     private val rvScore: RecyclerView
@@ -195,7 +194,6 @@ class DetailViewPagerAdapter(
         setListErrorCards(holder, errorCardsList)
         cvScore.visibility = View.VISIBLE
         tvCategory.visibility = View.GONE
-        infoBtn.visibility = View.GONE
     }
 
     private fun cornerAlphaOnMove(iv: ImageView, tv: TextView, scale: Float) {

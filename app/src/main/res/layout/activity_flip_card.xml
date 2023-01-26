@@ -64,8 +64,10 @@
                 app:layout_constraintTop_toBottomOf="@+id/label"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toTopOf="@+id/btnButton"
-                />
+                app:layout_constraintBottom_toTopOf="@+id/iv_refreshBtn"
+                >
+
+            </androidx.recyclerview.widget.RecyclerView>
 
             <Button
                 android:id="@+id/btnButton"
@@ -81,6 +83,17 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 />
+
+            <ImageView
+                android:id="@+id/iv_refreshBtn"
+                android:background="@drawable/refresh_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/ic_baseline_cached_24"
+                android:layout_marginVertical="6dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/btnButton"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
@@ -113,22 +126,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.2" />
-
-    <TextView
-        android:id="@+id/tv_contentCheck"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginBottom="128dp"
-        android:textColor="@color/project_Ghost_White"
-        android:background="@drawable/info_btn"
-        android:gravity="center"
-        android:textAlignment="center"
-        android:textStyle="bold"
-        android:textSize="32sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:text="i" />
 
     <ImageView
         android:id="@+id/gradient_left"
@@ -179,68 +176,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/gradient_right" />
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cv_cardInfo"
-        android:layout_width="300dp"
-        android:layout_height="400dp"
-        app:cardElevation="0dp"
-        android:alpha="1"
-        android:visibility="gone"
-        android:backgroundTint="@color/project_Ghost_White"
-        android:background="@drawable/card_back_bg"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="16dp">
-
-
-            <TextView
-                android:id="@+id/tv1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="This is a flip card game. For every card you got a title and you need to remember how to describe it."
-                android:textColor="@color/project_Raisin_black"
-                android:textSize="18sp"
-                android:layout_marginBottom="16dp"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toTopOf="@+id/tv2"/>
-
-
-            <TextView
-                android:id="@+id/tv2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="You can tap on a card to flip it and see if your guess was right."
-                android:layout_marginVertical="16dp"
-                android:textColor="@color/project_Raisin_black"
-                android:textSize="18sp"
-                app:layout_constraintTop_toBottomOf="@+id/tv1"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toTopOf="@+id/tv3"/>
-
-            <TextView
-                android:id="@+id/tv3"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginVertical="16dp"
-                android:text="Then you can swipe the card left if you were mistaking or right if aced it!"
-                android:textColor="@color/project_Raisin_black"
-                android:textSize="18sp"
-                app:layout_constraintTop_toBottomOf="@+id/tv2"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"/>
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-    </androidx.cardview.widget.CardView>
     <include layout="@layout/bottom_nav"/>
 
 
