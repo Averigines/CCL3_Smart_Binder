@@ -18,12 +18,14 @@ fun setUpBottomNav(context: Activity, activeItem: String)  {
     val llQuiz = context.findViewById<LinearLayout>(R.id.llQuiz)
     val llStats = context.findViewById<LinearLayout>(R.id.llStats)
 
+
     val activeColor = ContextCompat.getColor(context, R.color.project_active_bottom)
 
-    if(activeItem == "llHome") llHome.setBackgroundColor(activeColor)
-    if(activeItem == "llAddCard") llAddCard.setBackgroundColor(activeColor)
-    if(activeItem == "llQuiz") llQuiz.setBackgroundColor(activeColor)
-    if(activeItem == "llStats") llStats.setBackgroundColor(activeColor)
+    if(activeItem == "llHome") llHome.setBackgroundResource(R.drawable.bottom_nav_active)
+    //if(activeItem == "llHome") llHome.setBackgroundColor(activeColor)
+    if(activeItem == "llAddCard") llAddCard.setBackgroundResource(R.drawable.bottom_nav_active)
+    if(activeItem == "llQuiz") llQuiz.setBackgroundResource(R.drawable.bottom_nav_active)
+    if(activeItem == "llStats") llStats.setBackgroundResource(R.drawable.bottom_nav_active)
 
     llHome.setOnClickListener {
         val intent = Intent(context, MainActivity::class.java)
