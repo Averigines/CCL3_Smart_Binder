@@ -13,15 +13,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/button_style_primary"
+        android:paddingHorizontal="16dp"
         android:paddingVertical="8dp"
-        android:textAlignment="center"
         android:textColor="@color/project_Raisin_black"
         android:textSize="28sp"
         android:textStyle="bold"
+        android:gravity="center"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Biology"
-        android:paddingHorizontal="16dp"
-        app:drawableLeftCompat="@drawable/ic_arrow_down" />
+        app:drawableEndCompat="@drawable/ic_arrow_down_transparent"
+        app:drawableStartCompat="@drawable/ic_arrow_down" />
 
     <TextView
         android:id="@+id/tvCategoryChildCount"

@@ -187,6 +187,9 @@ interface CardResultDao {
     @Query("SELECT * FROM cardResult")
     fun getAll(): List<CardResult>
 
+    @Query("DELETE FROM cardResult")
+    fun deleteAll()
+
 }
 
 @Database(entities = [Category::class, Topic::class, Card::class, CardResult::class], version = 6, autoMigrations = [

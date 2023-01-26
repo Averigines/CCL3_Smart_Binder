@@ -1,9 +1,8 @@
-
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto"
 android:id="@+id/cardView"
 android:layout_width="match_parent"
 android:layout_height="80dp"
-android:background="@drawable/bottom_nav"
+app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.MaterialCardView.Cut"
 app:cardBackgroundColor="@color/project_Light_Grey"
 app:layout_constraintEnd_toEndOf="parent"
 app:layout_constraintStart_toStartOf="parent"
@@ -90,4 +89,4 @@ app:layout_constraintBottom_toBottomOf="parent">
     </LinearLayout>
 </LinearLayout>
 
-</androidx.cardview.widget.CardView>
+</com.google.android.material.card.MaterialCardView>

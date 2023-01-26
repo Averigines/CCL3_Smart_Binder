@@ -155,6 +155,7 @@ class MainActivity : AppCompatActivity(), OnTopicClickListener {
         db.categoryDao().deleteAll()
         db.topicDao().deleteAll()
         db.cardDao().deleteAll()
+        db.CardResultDao().deleteAll()
 
         db.categoryDao().insert(Category(0,"Biology"))
         db.categoryDao().insert(Category(0,"Chemistry"))
