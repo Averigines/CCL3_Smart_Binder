@@ -93,7 +93,7 @@
         android:id="@+id/btnAddCard"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-
+        android:visibility="gone"
         android:backgroundTint="@color/primary"
         android:text="Add card"
         android:textColor="@color/black"
@@ -133,16 +133,41 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/spinnerTopic" />
 
-    <ImageButton
-        android:id="@+id/ibDeleteCard"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:backgroundTint="#00FFFFFF"
-        android:layout_marginEnd="16dp"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@+id/tvTitle"
+    <LinearLayout
+        android:id="@+id/llValidate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@id/cardView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/tvTitle"
-        app:srcCompat="@drawable/ic_baseline_delete_forever_24"
-        />
+        android:visibility="visible"
+        android:gravity = "center"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etContent">
+
+        <ImageButton
+            android:id="@+id/ibDeleteCard"
+            android:layout_width="72dp"
+            android:layout_height="72dp"
+            android:layout_marginEnd="32dp"
+            android:backgroundTint="#00FFFFFF"
+            android:visibility="visible"
+            app:layout_constraintBottom_toTopOf="@+id/cardView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/etContent"
+            app:srcCompat="@drawable/ic_baseline_delete_forever_24" />
+
+        <ImageButton
+            android:id="@+id/ibSaveCard"
+            android:layout_width="72dp"
+            android:layout_height="72dp"
+            android:layout_marginStart="32dp"
+            android:backgroundTint="#00FFFFFF"
+            android:visibility="visible"
+            app:layout_constraintBottom_toTopOf="@+id/cardView"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/etContent"
+            app:srcCompat="@drawable/ic_baseline_check_box_24" />
+
+    </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

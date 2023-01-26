@@ -47,7 +47,7 @@ data class Card(
     onDelete = CASCADE)]
 )
 data class CardResult(
-    @PrimaryKey(autoGenerate = true) var id: Int,
+    @PrimaryKey(autoGenerate = true,) var id: Int,
     val cardId: Int,
     val categoryId: Int,
     var success: Boolean
