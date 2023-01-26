@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.room.Room
 
@@ -38,6 +39,8 @@ class ActivityAddCard : AppCompatActivity() {
         val etContent = findViewById<EditText>(R.id.etContent)
         val btnAddCard = findViewById<Button>(R.id.btnAddCard)
         val ibDeleteCard = findViewById<ImageButton>(R.id.ibDeleteCard)
+        val ibSaveCard = findViewById<ImageButton>(R.id.ibSaveCard)
+        val llBtn = findViewById<LinearLayout>(R.id.llValidate)
         lateinit var cardToEdit : Card
         var spinnerLayout = R.layout.spinner_item
 
@@ -56,12 +59,27 @@ class ActivityAddCard : AppCompatActivity() {
             spinnerCategories.backgroundTintList = colorStateList
             spinnerTopics.backgroundTintList = colorStateList
 
-            btnAddCard.text = "Save Changes"
-            ibDeleteCard.visibility = View.VISIBLE
-            ibDeleteCard.setOnClickListener {
-                db.cardDao().delete(cardToEdit)
-                startActivity(Intent(this, MainActivity::class.java))
+            ///////////////HERE CHANGE VISIBILITY OF LAYOUT
+            llBtn.visibility = View.VISIBLE
+            btnAddCard.visibility = View.GONE
 
+            ibSaveCard.setOnClickListener {
+
+            }
+
+            ibDeleteCard.setOnClickListener {
+                val builder = AlertDialog.Builder(this)
+                builder.setMessage("Are you sure you want to erase all the statistics?")
+                    .setTitle("Erasing confirmation")
+                builder.setPositiveButton("OK") { dialog, _ ->
+                    db.cardDao().delete(cardToEdit)
+                    dialog.dismiss()
+                }
+                builder.setNegativeButton("Cancel") { dialog, _ ->
+                    dialog.dismiss()
+                }
+                val dialog = builder.create()
+                dialog.show()
             }
 
             val topicOfCard = db.topicDao().getById(cardToEdit.topicId)

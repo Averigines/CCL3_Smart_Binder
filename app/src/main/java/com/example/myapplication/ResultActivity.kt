@@ -78,8 +78,6 @@ class ResultActivity : AppCompatActivity() {
             val dialog = builder.create()
             dialog.show()
         }
-
-
     }
 }
 
