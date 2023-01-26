@@ -1,5 +1,6 @@
 package com.example.myapplication
 
+import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Outline
 import androidx.appcompat.app.AppCompatActivity
@@ -41,8 +42,8 @@ class ResultActivity : AppCompatActivity() {
         }
 
         //get from db
-        val categoriesList: List<Category> = db.categoryDao().getAll()
-        val cardsTurnedList: List<CardResult> = db.CardResultDao().getAll()
+        val categoriesList = db.categoryDao().getAll().toMutableList()
+        val cardsTurnedList = db.CardResultDao().getAll().toMutableList()
         val successCards: MutableList<CardResult> = mutableListOf()
         cardsTurnedList.forEach {
             if (it.success) {
@@ -56,7 +57,7 @@ class ResultActivity : AppCompatActivity() {
             val scoreGen: Double = ceil((successCards.size.toDouble() / cardsTurnedList.size.toDouble())*100)
             tvScoreGeneral.text = "${successCards.size} / ${cardsTurnedList.size}         ${scoreGen}%"
         } else {
-            tvScoreGeneral.text = "Not test yet"
+            tvScoreGeneral.text = "No test yet"
         }
 
         rvDetailedScore.layoutManager = LinearLayoutManager(this)
@@ -70,6 +71,10 @@ class ResultActivity : AppCompatActivity() {
                 .setTitle("Erasing confirmation")
             builder.setPositiveButton("OK") { dialog, _ ->
                 db.CardResultDao().deleteAll()
+                categoriesList.clear()
+                cardsTurnedList.clear()
+                tvScoreGeneral.text = "No test yet"
+                rvDetailedScore.adapter!!.notifyDataSetChanged()
                 dialog.dismiss()
             }
             builder.setNegativeButton("Cancel") { dialog, _ ->

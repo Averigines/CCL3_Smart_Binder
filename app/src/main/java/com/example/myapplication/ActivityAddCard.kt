@@ -63,10 +63,6 @@ class ActivityAddCard : AppCompatActivity() {
             llBtn.visibility = View.VISIBLE
             btnAddCard.visibility = View.GONE
 
-            ibSaveCard.setOnClickListener {
-
-            }
-
             ibDeleteCard.setOnClickListener {
                 val builder = AlertDialog.Builder(this)
                 builder.setMessage("Are you sure you want to erase all the statistics?")
@@ -87,6 +83,28 @@ class ActivityAddCard : AppCompatActivity() {
 
             intent.putExtra("topic", topicOfCard)
             intent.putExtra("category", categoryOfCard)
+
+            ibSaveCard.setOnClickListener {
+                if (etTitle.text.toString() == "" && etContent.text.toString() == "") {
+                    Toast.makeText(this, "Please provide a Title and Content for your card!", Toast.LENGTH_SHORT).show()
+                }
+                else if (etTitle.text.toString() == "") {
+                    Toast.makeText(this, "Please provide a Title for your card!", Toast.LENGTH_SHORT).show()
+                }
+                else if (etContent.text.toString() == "") {
+                    Toast.makeText(this, "Please provide content for your card!", Toast.LENGTH_SHORT).show()
+                }
+                else if (fromCardEdit) {
+                    cardToEdit.title = etTitle.text.toString()
+                    cardToEdit.content = etContent.text.toString()
+                    db.cardDao().update(cardToEdit)
+                    Toast.makeText(this, "Card successfully updated!", Toast.LENGTH_SHORT).show()
+                    startActivity(Intent(this, MainActivity::class.java))
+                }
+                else {
+                    startActivity(Intent(this, MainActivity::class.java))
+                }
+            }
         }
 
         var fromCategories = false
@@ -251,6 +269,46 @@ class ActivityAddCard : AppCompatActivity() {
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
                 TODO("Not yet implemented")
+            }
+        }
+
+        ibSaveCard.setOnClickListener {
+            if (etTitle.text.toString() == "" && etContent.text.toString() == "") {
+                Toast.makeText(this, "Please provide a Title and Content for your card!", Toast.LENGTH_SHORT).show()
+            }
+            else if (etTitle.text.toString() == "") {
+                Toast.makeText(this, "Please provide a Title for your card!", Toast.LENGTH_SHORT).show()
+            }
+            else if (etContent.text.toString() == "") {
+                Toast.makeText(this, "Please provide content for your card!", Toast.LENGTH_SHORT).show()
+            }
+            else if (allCategoriesWithTopics.isEmpty() || spinnerCategories.selectedItem == newCategoryOption) {
+                Toast.makeText(this, "Please choose a Topic!", Toast.LENGTH_SHORT).show()
+            }
+            else if (relatedTopics.size == 0 || spinnerTopics.selectedItem == newTopicOption) {
+                Toast.makeText(this, "Please choose a Topic!", Toast.LENGTH_SHORT).show()
+            }
+
+            else if (fromCardEdit) {
+                cardToEdit.title = etTitle.text.toString()
+                cardToEdit.content = etContent.text.toString()
+                db.cardDao().update(cardToEdit)
+                Toast.makeText(this, "Card successfully updated!", Toast.LENGTH_SHORT).show()
+                startActivity(Intent(this, MainActivity::class.java))
+            }
+            else {
+                db.cardDao().insert(Card(0,etTitle.text.toString(), etContent.text.toString(),relatedTopics[spinnerTopics.selectedItemPosition].id))
+                Toast.makeText(this, "Card successfully added!", Toast.LENGTH_SHORT).show()
+                if (fromCategories) {
+                    val selectedTopicName = spinnerTopics.selectedItem.toString()
+                    val selectedTopic = db.topicDao().getTopicByName(selectedTopicName)
+                    val intent = Intent(this, ActivityCategory::class.java)
+                    intent.putExtra("topic", selectedTopic)
+                    startActivity(intent)
+                }
+                else {
+                    startActivity(Intent(this, MainActivity::class.java))
+                }
             }
         }
 

@@ -47,10 +47,11 @@
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cv_cardInfo"
         android:layout_width="match_parent"
-        android:layout_height="450dp"
+        android:layout_height="wrap_content"
         android:alpha="1"
         android:paddingHorizontal="16dp"
         android:layout_marginHorizontal="24dp"
+        android:layout_marginTop="16dp"
         android:backgroundTint="@color/project_Raisin_black"
         android:visibility="visible"
         app:cardCornerRadius="10dp"
@@ -66,8 +67,8 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="16dp">
-
+            android:paddingVertical="2dp"
+            android:paddingHorizontal="16dp">
 
             <TextView
                 android:id="@+id/tv1"
@@ -76,7 +77,6 @@
                 android:text="This is a flip card game. For every card you got a title and you need to remember how to describe it."
                 android:textColor="@color/project_Blizzard_Blue"
                 android:textSize="18sp"
-                app:layout_constraintBottom_toTopOf="@+id/imageView"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -86,11 +86,10 @@
                 android:id="@+id/tv2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginVertical="16dp"
+                android:layout_marginTop="16dp"
                 android:text="You can tap on a card to flip it and see if your guess was right."
                 android:textColor="@color/project_Blizzard_Blue"
                 android:textSize="18sp"
-                app:layout_constraintBottom_toTopOf="@+id/imageView2"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/imageView" />
@@ -99,11 +98,10 @@
                 android:id="@+id/tv3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginVertical="16dp"
+                android:layout_marginTop="16dp"
                 android:text="Then you can swipe the card left if you were mistaking or right if aced it!"
                 android:textColor="@color/project_Blizzard_Blue"
                 android:textSize="18sp"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/imageView2" />
@@ -112,8 +110,7 @@
                 android:id="@+id/imageView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                app:layout_constraintBottom_toTopOf="@+id/tv2"
+                android:layout_marginTop="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv1"
@@ -123,8 +120,7 @@
                 android:id="@+id/imageView2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                app:layout_constraintBottom_toTopOf="@+id/tv3"
+                android:layout_marginTop="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv2"
